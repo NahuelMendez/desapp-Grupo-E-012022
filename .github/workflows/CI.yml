@@ -29,4 +29,4 @@ jobs:
       with:
         java-version: 11
     - name: Build with Gradle
-      run: gradle wrapper --gradle-version=7.4.1 --distribution-type=all
+      run: ./gradlew build
