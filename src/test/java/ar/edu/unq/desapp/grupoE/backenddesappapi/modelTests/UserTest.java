@@ -1,14 +1,13 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.OperationIntent;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.PurchaseIntent;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.SaleIntent;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.assertEquals;
+
+
 
 public class UserTest {
 
@@ -23,9 +22,9 @@ public class UserTest {
         return user;
     }
 
-    private User getUserWithSaleIntention() {
+    private User getUserWithSaleIntention(String cryptoName, int nominalAmount) {
         User user = anUser();
-        SaleIntent sale = new SaleIntent("ALICEUSDT", 200, 120, 5000);
+        SaleIntent sale = new SaleIntent(cryptoName, nominalAmount, 120, 5000);
         user.expressIntention(sale);
         return user;
     }
@@ -58,7 +57,7 @@ public class UserTest {
 
     @Test
     public void anUserExpressHisSaleIntent() {
-        User user = getUserWithSaleIntention();
+        User user = getUserWithSaleIntention("ALICEUSDT", 200);
 
         OperationIntent intention = user.getIntention();
 
@@ -70,7 +69,7 @@ public class UserTest {
 
     @Test
     public void anUserWithSaleIntentionGetCvuAddress() {
-        User user = getUserWithSaleIntention();
+        User user = getUserWithSaleIntention("ALICEUSDT", 200);
 
         String cvuAddress = user.getCvu();
 
@@ -90,7 +89,7 @@ public class UserTest {
     public void whenAnTransactionIsCancelledTheUserLoseReputation(){
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         User user = anUser();
-        User seller = getUserWithSaleIntention();
+        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
 
         user.startTransaction(seller, date);
 
@@ -101,10 +100,10 @@ public class UserTest {
     }
 
     @Test
-    public void whenAnOperationIsCompleteWithin30MinutesTheUsersGets10ReputationPoits(){
+    public void whenAnOperationIsCompleteWithin30MinutesTheUsersGets10ReputationPoints(){
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         User user = anUser();
-        User seller = getUserWithSaleIntention();
+        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
 
         user.startTransaction(seller, date);
 
@@ -120,11 +119,11 @@ public class UserTest {
     }
 
     @Test
-    public void whenAnOperationIsNotCompleteWithin30MinutesTheUsersGets5ReputationPoits(){
+    public void whenAnOperationIsNotCompleteWithin30MinutesTheUsersGets5ReputationPoints(){
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         LocalDateTime postDate = LocalDateTime.of(2022, 4, 16, 21, 50);
         User user = anUser();
-        User seller = getUserWithSaleIntention();
+        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
 
         user.startTransaction(seller, date);
 
@@ -137,6 +136,44 @@ public class UserTest {
         assertEquals(5, seller.getReputation());
         assertEquals(1, user.operationsAmount());
         assertEquals(1, seller.operationsAmount());
+    }
+
+    @Test
+    public void whenAUserMakesAPurchaseTransactionAcquiresTheAsset(){
+        User user = anUser();
+        completeAPurchaseTransaction(user, "ALICEUSDT", 200);
+
+        assertTrue(user.assets()
+                .stream()
+                .anyMatch( asset -> asset.activeCrypto() == "ALICEUSDT"
+                        && asset.nominalAmount() == 200));
+    }
+
+    @Test
+    public void whenAUserMakesMoreThanOnePurchaseTransactionAcquiresTheAssets(){
+        User user = anUser();
+        completeAPurchaseTransaction(user, "ALICEUSDT", 200);
+        completeAPurchaseTransaction(user, "MATICUSDT", 300);
+
+        assertTrue(user.assets()
+                .stream()
+                .anyMatch( asset -> asset.activeCrypto() == "ALICEUSDT"
+                        && asset.nominalAmount() == 200));
+        assertTrue(user.assets()
+                .stream()
+                .anyMatch( asset -> asset.activeCrypto() == "MATICUSDT"
+                        && asset.nominalAmount() == 300));
+    }
+
+    private void completeAPurchaseTransaction(User user, String cryptoName, int nominalAmount) {
+        User seller = getUserWithSaleIntention(cryptoName, nominalAmount);
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        user.startTransaction(seller, date);
+
+        user.confirmTransaction();
+        seller.confirmTransaction();
+
+        user.completeTransaction(seller, date);
     }
 
 }

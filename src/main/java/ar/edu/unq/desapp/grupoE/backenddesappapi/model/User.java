@@ -1,6 +1,9 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class User {
 
@@ -15,6 +18,7 @@ public class User {
     private int operationsAmount = 0;
     private String walletAddress;
     private Transaction transaction;
+    private List<Asset> assets = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String address, String password, String cvu, String walletAddress) {
 
@@ -69,7 +73,7 @@ public class User {
     }
 
     public void startTransaction(User seller, LocalDateTime date) {
-        transaction = new Transaction(date);
+        transaction = new Transaction(date, this ,seller);
     }
 
     public void cancelOperation() {
@@ -91,18 +95,20 @@ public class User {
         points = points + pointsToAdd;
     }
 
-    private void addCompleteTransaction(int points) {
+    void addCompleteTransaction(int points) {
         this.addPoints(points);
         operationsAmount++;
     }
 
     public void completeTransaction(User seller, LocalDateTime date) {
-        if (transaction.isWithin30Minutes(date)) {
-            this.addCompleteTransaction(10);
-            seller.addCompleteTransaction(10);
-        } else {
-            this.addCompleteTransaction(5);
-            seller.addCompleteTransaction(5);
-        }
+        transaction.completeTransaction(date);
+    }
+
+    public List<Asset> assets() {
+        return assets;
+    }
+
+    public void addAsset(Asset asset) {
+        assets.add(asset);
     }
 }
