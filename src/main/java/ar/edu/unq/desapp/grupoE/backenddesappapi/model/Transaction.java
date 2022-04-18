@@ -7,11 +7,17 @@ public class Transaction {
     private LocalDateTime date;
     private User buyer;
     private User seller;
+    private OperationIntent intention;
 
-    public Transaction(LocalDateTime date, User buyer, User seller){
+    public Transaction(LocalDateTime date, User buyer, User seller, OperationIntent intention){
         this.date = date;
         this.buyer = buyer;
         this.seller = seller;
+        this.intention = intention;
+    }
+
+    public void cancelOperation(User buyer) {
+        buyer.cancelOperation();
     }
 
     public Boolean isWithin30Minutes(LocalDateTime completeDate) {
@@ -21,16 +27,23 @@ public class Transaction {
     }
 
     public void completeTransaction(LocalDateTime completeDate) {
-        if (this.isWithin30Minutes(completeDate)) {
-            buyer.addCompleteTransaction(10);
-            seller.addCompleteTransaction(10);
-        } else {
-            buyer.addCompleteTransaction(5);
-            seller.addCompleteTransaction(5);
-        }
-        OperationIntent intention = seller.getIntention();
         Asset asset = new Asset(intention.getActiveCrypto(), intention.getNominalAmount());
-        buyer.addAsset(asset);
-        seller.addAsset(asset);
+        if (this.isWithin30Minutes(completeDate)) {
+            completeTransactionForBoth(asset, 10);
+        } else {
+            completeTransactionForBoth(asset, 5);
+        }
+    }
+
+    private void completeTransactionForBoth(Asset asset, Integer points) {
+        buyer.addCompleteTransaction(points);
+        seller.addCompleteTransaction(points);
+    }
+
+    public void successfulTransfer() {
+    }
+
+    public void confirmedTransfer() {
+
     }
 }

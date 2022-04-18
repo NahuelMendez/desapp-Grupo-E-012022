@@ -4,11 +4,6 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDateTime;
-
-
-
-
 public class UserTest {
 
     public User anUser() {
@@ -83,97 +78,6 @@ public class UserTest {
         String walletAddress = user.getWalletAddress();
 
         assertEquals(walletAddress , user.getShippingAddress());
-    }
-
-    @Test
-    public void whenAnTransactionIsCancelledTheUserLoseReputation(){
-        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        User user = anUser();
-        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
-
-        user.startTransaction(seller, date);
-
-        user.cancelOperation();
-
-        assertEquals(-20, user.getReputation());
-        assertEquals(0, user.operationsAmount());
-    }
-
-    @Test
-    public void whenAnOperationIsCompleteWithin30MinutesTheUsersGets10ReputationPoints(){
-        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        User user = anUser();
-        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
-
-        user.startTransaction(seller, date);
-
-        user.confirmTransaction();
-        seller.confirmTransaction();
-
-        user.completeTransaction(seller, date);
-
-        assertEquals(10, user.getReputation());
-        assertEquals(10, seller.getReputation());
-        assertEquals(1, user.operationsAmount());
-        assertEquals(1, seller.operationsAmount());
-    }
-
-    @Test
-    public void whenAnOperationIsNotCompleteWithin30MinutesTheUsersGets5ReputationPoints(){
-        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        LocalDateTime postDate = LocalDateTime.of(2022, 4, 16, 21, 50);
-        User user = anUser();
-        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
-
-        user.startTransaction(seller, date);
-
-        user.confirmTransaction();
-        seller.confirmTransaction();
-
-        user.completeTransaction(seller, postDate);
-
-        assertEquals(5, user.getReputation());
-        assertEquals(5, seller.getReputation());
-        assertEquals(1, user.operationsAmount());
-        assertEquals(1, seller.operationsAmount());
-    }
-
-    @Test
-    public void whenAUserMakesAPurchaseTransactionAcquiresTheAsset(){
-        User user = anUser();
-        completeAPurchaseTransaction(user, "ALICEUSDT", 200);
-
-        assertTrue(user.assets()
-                .stream()
-                .anyMatch( asset -> asset.activeCrypto() == "ALICEUSDT"
-                        && asset.nominalAmount() == 200));
-    }
-
-    @Test
-    public void whenAUserMakesMoreThanOnePurchaseTransactionAcquiresTheAssets(){
-        User user = anUser();
-        completeAPurchaseTransaction(user, "ALICEUSDT", 200);
-        completeAPurchaseTransaction(user, "MATICUSDT", 300);
-
-        assertTrue(user.assets()
-                .stream()
-                .anyMatch( asset -> asset.activeCrypto() == "ALICEUSDT"
-                        && asset.nominalAmount() == 200));
-        assertTrue(user.assets()
-                .stream()
-                .anyMatch( asset -> asset.activeCrypto() == "MATICUSDT"
-                        && asset.nominalAmount() == 300));
-    }
-
-    private void completeAPurchaseTransaction(User user, String cryptoName, int nominalAmount) {
-        User seller = getUserWithSaleIntention(cryptoName, nominalAmount);
-        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        user.startTransaction(seller, date);
-
-        user.confirmTransaction();
-        seller.confirmTransaction();
-
-        user.completeTransaction(seller, date);
     }
 
 }

@@ -1,9 +1,5 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class User {
 
@@ -17,8 +13,6 @@ public class User {
     private int points = 0;
     private int operationsAmount = 0;
     private String walletAddress;
-    private Transaction transaction;
-    private List<Asset> assets = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String address, String password, String cvu, String walletAddress) {
 
@@ -72,10 +66,6 @@ public class User {
         return intention.getShippingAddress(this);
     }
 
-    public void startTransaction(User seller, LocalDateTime date) {
-        transaction = new Transaction(date, this ,seller);
-    }
-
     public void cancelOperation() {
         points = points - 20;
     }
@@ -88,9 +78,6 @@ public class User {
         return operationsAmount;
     }
 
-    public void confirmTransaction() {
-    }
-
     private void addPoints(int pointsToAdd) {
         points = points + pointsToAdd;
     }
@@ -100,15 +87,4 @@ public class User {
         operationsAmount++;
     }
 
-    public void completeTransaction(User seller, LocalDateTime date) {
-        transaction.completeTransaction(date);
-    }
-
-    public List<Asset> assets() {
-        return assets;
-    }
-
-    public void addAsset(Asset asset) {
-        assets.add(asset);
-    }
 }
