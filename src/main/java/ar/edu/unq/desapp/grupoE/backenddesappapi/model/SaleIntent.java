@@ -7,7 +7,7 @@ public class SaleIntent extends OperationIntent{
     }
 
     @Override
-    public String getShippingAddress(User user) {
+    public String shippingAddress(User user) {
         return user.getCvu();
     }
 }

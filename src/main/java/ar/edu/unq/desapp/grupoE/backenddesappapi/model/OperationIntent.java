@@ -1,10 +1,24 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.criteria.CriteriaBuilder;
+
+@Entity
+@Table(name = "intentions")
 public abstract class OperationIntent {
 
+    @Id
+    private Integer id;
+    @Column
     private String activeCrypto;
+    @Column
     private int nominalAmount;
+    @Column
     private int cryptoPrice;
+    @Column
     private int operationAmount;
 
     public OperationIntent(String activeCrypto, int nominalAmount, int cryptoPrice, int operationAmount) {
@@ -30,5 +44,5 @@ public abstract class OperationIntent {
         return operationAmount;
     }
 
-    public abstract String getShippingAddress(User user);
+    public abstract String shippingAddress(User user);
 }
