@@ -1,7 +1,21 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class User {
+
+    public static final String USERNAME_ERROR_MESSAGE = "The name can't have less than 3 or more than 30 characters.";
+    public static final String USER_EMAIL_ERROR_MESSAGE = "The email should have an email format, for example 'example@example.com'.";
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    public static final String USER_ADDRESS_ERROR_MESSAGE = "The user address can't have less than 10 or more than 30 characters.";
+    public static final String CVU_ERROR_MESSAGE = "The cvu should have 22 digits.";
+    public static final Pattern CONTAINS_ONLY_DIGITS_REGEX = Pattern.compile("[0-9]+", Pattern.CASE_INSENSITIVE);
+    public static final String WALLET_ADDRESS_ERROR_MESSAGE = "The wallet address should contains 8 digits.";
+
+    public static final Pattern PASSWORD_REGEX = Pattern.compile("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#?!@$%^&-]).{6,}", Pattern.CASE_INSENSITIVE);
+    public static final String PASSWORD_ERROR_MESSAGE = "The password is not valid, must cointains a lowecase, a uppercase, a special character and minimum 6 in length";
 
     private String firstName;
     private String lastName;
@@ -14,7 +28,14 @@ public class User {
     private int operationsAmount = 0;
     private String walletAddress;
 
-    public User(String firstName, String lastName, String email, String address, String password, String cvu, String walletAddress) {
+    public User(String firstName, String lastName, String email, String address, String password, String cvu, String walletAddress) throws UserException {
+
+        validateName(firstName, lastName);
+        validateEmail(email);
+        validateAddress(address);
+        validatePassword(password);
+        validateCvu(cvu);
+        validateWalletAddress(walletAddress);
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,6 +45,61 @@ public class User {
         this.cvu = cvu;
         this.walletAddress = walletAddress;
 
+    }
+
+    private void validatePassword(String password) throws UserException {
+        if (!isValidPassword(password)) {
+            throw new UserException(PASSWORD_ERROR_MESSAGE);
+        }
+    }
+
+    private boolean isValidPassword(String password) {
+        Matcher matcher = PASSWORD_REGEX.matcher(password);
+        return matcher.matches();
+    }
+
+    private void validateWalletAddress(String walletAddress) throws UserException {
+        if (!(walletAddress.length() == 8) || !containsDigits(walletAddress)) {
+            throw new UserException(WALLET_ADDRESS_ERROR_MESSAGE);
+        }
+    }
+
+    private boolean containsDigits(String userData) {
+        Matcher matcher = CONTAINS_ONLY_DIGITS_REGEX.matcher(userData);
+        return matcher.matches();
+    }
+
+    private void validateCvu(String cvu) throws UserException {
+        if (!(cvu.length() == 22) || !containsDigits(cvu)) {
+            throw new UserException(CVU_ERROR_MESSAGE);
+        }
+    }
+
+    private void validateAddress(String address) throws UserException {
+        if (address.length() > 30 || address.length() < 10) {
+            throw new UserException(USER_ADDRESS_ERROR_MESSAGE);
+        }
+    }
+
+    private void validateEmail(String email) throws UserException {
+        if(!isValidEmail(email)) {
+            throw new UserException(USER_EMAIL_ERROR_MESSAGE);
+        }
+    }
+
+    private boolean isValidEmail(String email) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+        return matcher.find();
+    }
+
+    private void validateName(String firstName, String lastName) throws UserException {
+        if (notValidName(firstName) || notValidName(lastName)) {
+            throw new UserException(USERNAME_ERROR_MESSAGE);
+        }
+    }
+
+    private boolean notValidName(String firstName) {
+        return firstName.length() < 3 || firstName.length() > 30;
     }
 
     public String getFirstName() {
