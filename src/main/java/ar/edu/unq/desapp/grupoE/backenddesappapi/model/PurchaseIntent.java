@@ -7,7 +7,7 @@ public class PurchaseIntent extends OperationIntent {
     }
 
     @Override
-    public String getShippingAddress(User user) {
+    public String shippingAddress(User user) {
         return user.getWalletAddress();
     }
 }

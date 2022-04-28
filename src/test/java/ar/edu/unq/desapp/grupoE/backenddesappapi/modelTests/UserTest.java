@@ -72,7 +72,7 @@ public class UserTest {
 
         String cvuAddress = user.getCvu();
 
-        assertEquals(cvuAddress, user.getShippingAddress());
+        assertEquals(cvuAddress, user.shippingAddress());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class UserTest {
 
         String walletAddress = user.getWalletAddress();
 
-        assertEquals(walletAddress , user.getShippingAddress());
+        assertEquals(walletAddress , user.shippingAddress());
     }
 
     @Test

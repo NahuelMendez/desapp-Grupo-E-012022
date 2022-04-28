@@ -16,8 +16,8 @@ public class Transaction {
         this.intention = intention;
     }
 
-    public void cancelOperation(User buyer) {
-        buyer.cancelOperation();
+    public void cancelOperation(User user) {
+        user.cancelOperation();
     }
 
     public Boolean isWithin30Minutes(LocalDateTime completeDate) {
