@@ -66,7 +66,7 @@ public class TransactionTest {
     }
 
     public User anUser() throws UserException {
-        return new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", "unaPassword", "1234567891234567891234", "12345678");
+        return new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
     }
 
     private User getUserWithSaleIntention(String cryptoName, int nominalAmount) throws UserException {
