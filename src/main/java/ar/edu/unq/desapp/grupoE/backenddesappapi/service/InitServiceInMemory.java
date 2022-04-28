@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
 import javax.annotation.PostConstruct;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +24,17 @@ public class InitServiceInMemory {
     private UserService userService;
 
     @PostConstruct
-    public void initialize() {
+    public void initialize() throws UserException {
         if (className.equals("org.h2.Driver")) {
             logger.info("Init Data Using H2 DB");
             fireInitialData();
         }
     }
 
-    private void fireInitialData() {
-        User user = new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", "unaPassword", "1234567891234567891234", "12345678");
+    private void fireInitialData() throws UserException {
+        User user = new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
         userService.save(user);
-        User user2 = new User("Samanta", "Quiroga", "email@gmail.com", "San Martin 185", "unaPassword", "1234567891234567891234", "12345678");
+        User user2 = new User("Samanta", "Quiroga", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
         userService.save(user2);
     }
 }
