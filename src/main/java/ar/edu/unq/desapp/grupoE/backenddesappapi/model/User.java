@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +35,7 @@ public class User {
     @Column
     private String address;
     @Column
+    @NotNull(message = "password not null")
     private String password;
     @Column
     private String cvu;
