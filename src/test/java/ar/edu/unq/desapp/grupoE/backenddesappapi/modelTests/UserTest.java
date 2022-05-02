@@ -2,31 +2,12 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
-
-    public User anUser() throws UserException {
-        return new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
-    }
-
-    private String getValidPassword() {
-        return "unaPassw123??";
-    }
-
-    private User getUserWithPurchaseIntention() throws UserException {
-        User user = anUser();
-        PurchaseIntent purchase = new PurchaseIntent("ALICEUSDT", 200, 120, 5000);
-        user.expressIntention(purchase);
-        return user;
-    }
-
-    private User getUserWithSaleIntention(String cryptoName, int nominalAmount) throws UserException {
-        User user = anUser();
-        SaleIntent sale = new SaleIntent(cryptoName, nominalAmount, 120, 5000);
-        user.expressIntention(sale);
-        return user;
-    }
 
     @Test
     public void anUserHasNameLastNameEmailAddressPasswordCVUAndWalletAddress() throws UserException {
@@ -43,45 +24,21 @@ public class UserTest {
     }
 
     @Test
-    public void anUserExpressHisPurchaseIntent() throws UserException {
+    public void anUserNotHaveAPurchaseIntention() throws UserException {
+        User user = anUser();
+
+        List<Intention> intentions = user.getIntentions();
+
+        assertTrue(intentions.isEmpty());
+    }
+
+    @Test
+    public void anUserExpressHisIntention() throws UserException {
         User user = getUserWithPurchaseIntention();
 
-        OperationIntent intention = user.getIntention();
+        List<Intention> intentions = user.getIntentions();
 
-        assertEquals("ALICEUSDT", intention.getActiveCrypto());
-        assertEquals(200, intention.getNominalAmount());
-        assertEquals(120, intention.getCryptoPrice());
-        assertEquals(5000, intention.getOperationAmount());
-    }
-
-    @Test
-    public void anUserExpressHisSaleIntent() throws UserException {
-        User user = getUserWithSaleIntention("ALICEUSDT", 200);
-
-        OperationIntent intention = user.getIntention();
-
-        assertEquals("ALICEUSDT", intention.getActiveCrypto());
-        assertEquals(200, intention.getNominalAmount());
-        assertEquals(120, intention.getCryptoPrice());
-        assertEquals(5000, intention.getOperationAmount());
-    }
-
-    @Test
-    public void anUserWithSaleIntentionGetCvuAddress() throws UserException {
-        User user = getUserWithSaleIntention("ALICEUSDT", 200);
-
-        String cvuAddress = user.getCvu();
-
-        assertEquals(cvuAddress, user.shippingAddress());
-    }
-
-    @Test
-    public void anUserWithPurchaseIntentionGetWalletAddress() throws UserException {
-        User user = getUserWithPurchaseIntention();
-
-        String walletAddress = user.getWalletAddress();
-
-        assertEquals(walletAddress , user.shippingAddress());
+        assertFalse(intentions.isEmpty());
     }
 
     @Test
@@ -215,6 +172,28 @@ public class UserTest {
         assertEquals(User.PASSWORD_ERROR_MESSAGE, withoutUpperCase.getMessage());
         assertEquals(User.PASSWORD_ERROR_MESSAGE, withoutSpecialCharacter.getMessage());
         assertEquals(User.PASSWORD_ERROR_MESSAGE, without6Length.getMessage());
+    }
+
+    public User anUser() throws UserException {
+        return new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+    }
+
+    private String getValidPassword() {
+        return "unaPassw123??";
+    }
+
+    private User getUserWithPurchaseIntention() throws UserException {
+        User user = anUser();
+        PurchaseIntention purchase = new PurchaseIntention("ALICEUSDT", 200, 120, 5000, user);
+        user.expressIntention(purchase);
+        return user;
+    }
+
+    private User getUserWithSaleIntention(String cryptoName, int nominalAmount) throws UserException {
+        User user = anUser();
+        SaleIntention sale = new SaleIntention(cryptoName, nominalAmount, 120, 5000, user);
+        user.expressIntention(sale);
+        return user;
     }
 
 }

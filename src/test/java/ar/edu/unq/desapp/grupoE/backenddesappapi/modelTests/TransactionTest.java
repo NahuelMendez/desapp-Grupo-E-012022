@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.SaleIntent;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.SaleIntention;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Transaction;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
@@ -14,65 +14,87 @@ public class TransactionTest {
 
     @Test
     public void whenAnOperationIsCompleteWithin30MinutesTheUsersGets10ReputationPoints() throws UserException {
-        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+
         User buyer = anUser();
-        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
-
-        Transaction transaction = new Transaction(date, buyer ,seller, seller.getIntention());
-
-        transaction.successfulTransfer();
-        transaction.confirmedTransfer();
-
-        transaction.completeTransaction(date);
+        User seller = anUser();
+        doTransactionWithin30Minutes( buyer, seller);
 
         assertEquals(10, buyer.getReputation());
         assertEquals(10, seller.getReputation());
-        assertEquals(1, buyer.operationsAmount());
-        assertEquals(1, seller.operationsAmount());
+        assertEquals(1, buyer.getOperationsAmount());
+        assertEquals(1, seller.getOperationsAmount());
     }
 
     @Test
     public void whenAnOperationIsNotCompleteWithin30MinutesTheUsersGets5ReputationPoints() throws UserException {
-        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        LocalDateTime postDate = LocalDateTime.of(2022, 4, 16, 21, 50);
         User buyer = anUser();
-        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
-
-        Transaction transaction = new Transaction(date, buyer ,seller, seller.getIntention());
-
-        transaction.successfulTransfer();
-        transaction.confirmedTransfer();
-
-        transaction.completeTransaction(postDate);
+        User seller = anUser();
+        doTransactionPassingThe30Minutes(buyer, seller);
 
         assertEquals(5, buyer.getReputation());
         assertEquals(5, seller.getReputation());
-        assertEquals(1, buyer.operationsAmount());
-        assertEquals(1, seller.operationsAmount());
+        assertEquals(1, buyer.getOperationsAmount());
+        assertEquals(1, seller.getOperationsAmount());
     }
 
     @Test
     public void whenAnTransactionIsCancelledTheUserLoseReputation() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         User buyer = anUser();
-        User seller = getUserWithSaleIntention("ALICEUSDT", 200);
+        User seller = anUser();
 
-        Transaction transaction = new Transaction(date, buyer ,seller, seller.getIntention());
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer ,seller, sale);
 
         transaction.cancelOperation(buyer);
 
         assertEquals(-20, buyer.getReputation());
-        assertEquals(0, buyer.operationsAmount());
+        assertEquals(0, buyer.getOperationsAmount());
+    }
+
+    @Test
+    public void whenAnUserCompleteTwoTransactionYourReputationIsCalculatedForPointsAndOperationsAmount() throws UserException {
+        User buyer = anUser();
+        User seller = anUser();
+        doTransactionWithin30Minutes(buyer, seller);
+        doTransactionWithin30Minutes(buyer, seller);
+
+        assertEquals(10, buyer.getReputation());
+        assertEquals(10, seller.getReputation());
+        assertEquals(2, buyer.getOperationsAmount());
+        assertEquals(2, seller.getOperationsAmount());
+    }
+
+    private void doTransactionWithin30Minutes( User buyer, User seller) {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        transaction.successfulTransfer();
+        transaction.confirmedTransfer();
+
+        transaction.completeTransaction(date);
+    }
+
+    private void doTransactionPassingThe30Minutes(User buyer, User seller) {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        LocalDateTime postDate = LocalDateTime.of(2022, 4, 16, 21, 50);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        transaction.successfulTransfer();
+        transaction.confirmedTransfer();
+
+        transaction.completeTransaction(postDate);
     }
 
     public User anUser() throws UserException {
         return new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
-    }
-
-    private User getUserWithSaleIntention(String cryptoName, int nominalAmount) throws UserException {
-        User user = anUser();
-        SaleIntent sale = new SaleIntent(cryptoName, nominalAmount, 120, 5000);
-        user.expressIntention(sale);
-        return user;
     }
 }

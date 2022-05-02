@@ -1,9 +1,11 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -18,7 +20,6 @@ public class User {
     public static final String CVU_ERROR_MESSAGE = "The cvu should have 22 digits.";
     public static final Pattern CONTAINS_ONLY_DIGITS_REGEX = Pattern.compile("[0-9]+", Pattern.CASE_INSENSITIVE);
     public static final String WALLET_ADDRESS_ERROR_MESSAGE = "The wallet address should contains 8 digits.";
-
     public static final Pattern PASSWORD_REGEX = Pattern.compile("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#?!@$%^&-]).{6,}", Pattern.CASE_INSENSITIVE);
     public static final String PASSWORD_ERROR_MESSAGE = "The password is not valid, must cointains a lowecase, a uppercase, a special character and minimum 6 in length";
 
@@ -35,18 +36,18 @@ public class User {
     @Column
     private String address;
     @Column
-    @NotNull(message = "password not null")
     private String password;
     @Column
     private String cvu;
-    @OneToOne(targetEntity=OperationIntent.class, fetch=FetchType.EAGER)
-    private OperationIntent intention;
     @Column
     private int points = 0;
     @Column
     private int operationsAmount = 0;
     @Column
     private String walletAddress;
+    @OneToMany(targetEntity= Intention.class, fetch=FetchType.EAGER) //Revisar
+    private ArrayList<Intention> intentions;
+    private Integer badPointsReputation = 0;
 
     public User() {
         super();
@@ -68,7 +69,67 @@ public class User {
         this.password = password;
         this.cvu = cvu;
         this.walletAddress = walletAddress;
+        this.intentions = new ArrayList<>();
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getCvu() {
+        return cvu;
+    }
+
+    public String getWalletAddress() {
+        return walletAddress;
+    }
+
+    public Integer getReputation() {
+        if (operationsAmount == 0) {
+            return badPointsReputation;
+        }
+        return points / operationsAmount + badPointsReputation;
+    }
+
+    public Integer getOperationsAmount() {
+        return operationsAmount;
+    }
+
+    public void expressIntention(Intention intention) {
+        intentions.add(intention);
+    }
+
+    public void cancelTransaction() {
+        badPointsReputation = badPointsReputation - 20;
+    }
+
+    public void completeTransaction(int points) {
+        this.addPoints(points);
+        operationsAmount++;
+    }
+
+    public List<Intention> getIntentions() {
+        return intentions;
+    }
+
+    private void addPoints(int pointsToAdd) {
+        points = points + pointsToAdd;
     }
 
     private void validatePassword(String password) throws UserException {
@@ -88,7 +149,7 @@ public class User {
         }
     }
 
-    private boolean containsDigits(String userData) {
+    private Boolean containsDigits(String userData) {
         Matcher matcher = CONTAINS_ONLY_DIGITS_REGEX.matcher(userData);
         return matcher.matches();
     }
@@ -122,69 +183,7 @@ public class User {
         }
     }
 
-    private boolean notValidName(String firstName) {
+    private Boolean notValidName(String firstName) {
         return firstName.length() < 3 || firstName.length() > 30;
     }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCvu() {
-        return cvu;
-    }
-
-    public String getWalletAddress() {
-        return walletAddress;
-    }
-
-    public void expressIntention(OperationIntent opIntent) {
-        intention = opIntent;
-    }
-
-    public OperationIntent getIntention() {
-        return intention;
-    }
-
-    public String shippingAddress() {
-        return intention.shippingAddress(this);
-    }
-
-    public void cancelOperation() {
-        points = points - 20;
-    }
-
-    public int getReputation() {
-        return points;
-    }
-
-    public int operationsAmount() {
-        return operationsAmount;
-    }
-
-    private void addPoints(int pointsToAdd) {
-        points = points + pointsToAdd;
-    }
-
-    void addCompleteTransaction(int points) {
-        this.addPoints(points);
-        operationsAmount++;
-    }
-
 }
