@@ -67,7 +67,43 @@ public class TransactionTest {
         assertEquals(2, seller.getOperationsAmount());
     }
 
-    private void doTransactionWithin30Minutes( User buyer, User seller) {
+    @Test
+    public void theTransferCannotBeConfirmedIfTheTransferWasNotMade() throws UserException {
+        User buyer = anUser();
+        User seller = anUser();
+
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        UserException thrown = assertThrows(UserException.class,  () -> {
+            transaction.confirmedTransfer(date);
+        });
+
+        assertEquals(Transaction.CANNOT_CONFIRM_TRANSFER, thrown.getMessage());
+    }
+
+    @Test
+    public void theTransferCannotBeMadeIfTheTransactionWasCanceled() throws UserException {
+        User buyer = anUser();
+        User seller = anUser();
+
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        transaction.cancelOperation(buyer);
+
+        UserException thrown = assertThrows(UserException.class, transaction::successfulTransfer);
+
+        assertEquals(Transaction.CANNOT_MADE_TRANSFER, thrown.getMessage());
+    }
+
+    private void doTransactionWithin30Minutes( User buyer, User seller) throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
         seller.expressIntention(sale);
@@ -75,12 +111,10 @@ public class TransactionTest {
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.successfulTransfer();
-        transaction.confirmedTransfer();
-
-        transaction.completeTransaction(date);
+        transaction.confirmedTransfer(date);
     }
 
-    private void doTransactionPassingThe30Minutes(User buyer, User seller) {
+    private void doTransactionPassingThe30Minutes(User buyer, User seller) throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         LocalDateTime postDate = LocalDateTime.of(2022, 4, 16, 21, 50);
         SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
@@ -89,9 +123,7 @@ public class TransactionTest {
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.successfulTransfer();
-        transaction.confirmedTransfer();
-
-        transaction.completeTransaction(postDate);
+        transaction.confirmedTransfer(postDate);
     }
 
     public User anUser() throws UserException {
