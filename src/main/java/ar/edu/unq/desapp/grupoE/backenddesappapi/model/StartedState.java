@@ -10,7 +10,7 @@ public class StartedState extends TransactionState {
     }
 
     @Override
-    public void succesfulTransfer(Transaction transaction) {
+    public void successfulTransfer(Transaction transaction) {
         transaction.madeTransfer();
     }
 }

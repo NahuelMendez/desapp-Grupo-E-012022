@@ -10,7 +10,7 @@ public class TransferStatus extends TransactionState {
     }
 
     @Override
-    public void succesfulTransfer(Transaction transaction) throws UserException {
+    public void successfulTransfer(Transaction transaction) throws UserException {
         transaction.cancelTransfer();
     }
 }

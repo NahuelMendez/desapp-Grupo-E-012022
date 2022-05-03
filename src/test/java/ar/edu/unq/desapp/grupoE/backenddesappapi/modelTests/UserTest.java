@@ -3,6 +3,8 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -184,14 +186,18 @@ public class UserTest {
 
     private User getUserWithPurchaseIntention() throws UserException {
         User user = anUser();
-        PurchaseIntention purchase = new PurchaseIntention("ALICEUSDT", 200, 120, 5000, user);
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
+        PurchaseIntention purchase = new PurchaseIntention("ALICEUSDT", 200, 120, 5000, user, quotes);
         user.expressIntention(purchase);
         return user;
     }
 
     private User getUserWithSaleIntention(String cryptoName, int nominalAmount) throws UserException {
         User user = anUser();
-        SaleIntention sale = new SaleIntention(cryptoName, nominalAmount, 120, 5000, user);
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
+        SaleIntention sale = new SaleIntention(cryptoName, nominalAmount, 120, 5000, user, quotes);
         user.expressIntention(sale);
         return user;
     }

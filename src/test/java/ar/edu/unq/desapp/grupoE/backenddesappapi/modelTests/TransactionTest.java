@@ -1,12 +1,11 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.SaleIntention;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Transaction;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,8 +41,10 @@ public class TransactionTest {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         User buyer = anUser();
         User seller = anUser();
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
 
-        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller, quotes);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer ,seller, sale);
@@ -71,9 +72,10 @@ public class TransactionTest {
     public void theTransferCannotBeConfirmedIfTheTransferWasNotMade() throws UserException {
         User buyer = anUser();
         User seller = anUser();
-
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller, quotes);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
@@ -89,9 +91,10 @@ public class TransactionTest {
     public void theTransferCannotBeMadeIfTheTransactionWasCanceled() throws UserException {
         User buyer = anUser();
         User seller = anUser();
-
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller, quotes);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
@@ -105,7 +108,9 @@ public class TransactionTest {
 
     private void doTransactionWithin30Minutes( User buyer, User seller) throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller, quotes);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
@@ -117,7 +122,9 @@ public class TransactionTest {
     private void doTransactionPassingThe30Minutes(User buyer, User seller) throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         LocalDateTime postDate = LocalDateTime.of(2022, 4, 16, 21, 50);
-        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller);
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
+        SaleIntention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller, quotes);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);

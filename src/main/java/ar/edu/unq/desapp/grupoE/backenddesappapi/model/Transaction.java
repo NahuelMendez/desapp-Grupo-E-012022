@@ -32,7 +32,7 @@ public class Transaction {
     }
 
     public void successfulTransfer() throws UserException {
-        status.succesfulTransfer(this);
+        status.successfulTransfer(this);
     }
 
     public void madeTransfer() {
