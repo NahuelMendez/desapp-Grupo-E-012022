@@ -9,6 +9,12 @@ public class SaleIntention extends Intention {
     }
 
     @Override
+    public Boolean thePriceIsNotWithinTheAllowedLimit(List<Crypto> quotes) {
+        Crypto crypto = super.cryptoWithName(quotes, super.getActiveCrypto());
+        return crypto.getPrice() < super.getCryptoPrice();
+    }
+
+    @Override
     public String shippingAddress() {
         return getUser().getCvu();
     }

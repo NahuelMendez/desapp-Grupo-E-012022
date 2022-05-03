@@ -81,7 +81,7 @@ public class TransactionTest {
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         UserException thrown = assertThrows(UserException.class,  () -> {
-            transaction.confirmedTransfer(date);
+            transaction.confirmedTransfer(date, quotes);
         });
 
         assertEquals(Transaction.CANNOT_CONFIRM_TRANSFER, thrown.getMessage());
@@ -106,6 +106,52 @@ public class TransactionTest {
         assertEquals(Transaction.CANNOT_MADE_TRANSFER, thrown.getMessage());
     }
 
+    @Test
+    public void whenAPurchaseOperationIsCompleteButTheSystemPriceIsAboveOfThePriceStatedByTheUser() throws UserException {
+        User buyer = anUser();
+        User seller = anUser();
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        Crypto cryptoLastUpdate = new Crypto("ALICEUSDT", 140, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
+        List<Crypto> quotesLastUpdate = Collections.singletonList(cryptoLastUpdate);
+        Intention sale = new PurchaseIntention("ALICEUSDT", 200, 120, 5000, seller, quotes);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        transaction.successfulTransfer();
+        transaction.confirmedTransfer(date, quotesLastUpdate);
+
+        assertEquals(0, buyer.getReputation());
+        assertEquals(0, seller.getReputation());
+        assertEquals(0, buyer.getOperationsAmount());
+        assertEquals(0, seller.getOperationsAmount());
+    }
+
+    @Test
+    public void whenASaleOperationIsCompleteButTheSystemPriceIsBelowOfThePriceStatedByTheUser() throws UserException {
+        User buyer = anUser();
+        User seller = anUser();
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+        Crypto cryptoLastUpdate = new Crypto("ALICEUSDT", 100, LocalDateTime.now());
+        List<Crypto> quotes = Collections.singletonList(crypto);
+        List<Crypto> quotesLastUpdate = Collections.singletonList(cryptoLastUpdate);
+        Intention sale = new SaleIntention("ALICEUSDT", 200, 120, 5000, seller, quotes);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        transaction.successfulTransfer();
+        transaction.confirmedTransfer(date, quotesLastUpdate);
+
+        assertEquals(0, buyer.getReputation());
+        assertEquals(0, seller.getReputation());
+        assertEquals(0, buyer.getOperationsAmount());
+        assertEquals(0, seller.getOperationsAmount());
+    }
+
     private void doTransactionWithin30Minutes( User buyer, User seller) throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
@@ -116,7 +162,7 @@ public class TransactionTest {
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.successfulTransfer();
-        transaction.confirmedTransfer(date);
+        transaction.confirmedTransfer(date, quotes);
     }
 
     private void doTransactionPassingThe30Minutes(User buyer, User seller) throws UserException {
@@ -130,7 +176,7 @@ public class TransactionTest {
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.successfulTransfer();
-        transaction.confirmedTransfer(postDate);
+        transaction.confirmedTransfer(postDate, quotes);
     }
 
     public User anUser() throws UserException {

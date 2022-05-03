@@ -31,12 +31,13 @@ public abstract class Intention {
     }
 
     protected void assertPriceIsOutsideTheVariationMarginOfFivePercent(List<Crypto> quotes,String cryptoName,Integer price) throws UserException {
-        Crypto crypto = quotes.stream().filter(quote -> cryptoName.equals(quote.getName())).findFirst().get();
-        if ((crypto.getPrice() * 0.05 <  Math.abs(price - crypto.getPrice())) ||
-                (crypto.getPrice() * 0.05 >  Math.abs(price - crypto.getPrice()))) {
+        Crypto crypto = cryptoWithName(quotes, cryptoName);
+        if ((crypto.getPrice() * 0.05 <  Math.abs(price - crypto.getPrice()))) {
             throw new UserException(CANNOT_CREATE_INTENTION);
         }
     }
+
+    public abstract Boolean thePriceIsNotWithinTheAllowedLimit(List<Crypto> quotes);
 
     public String getActiveCrypto(){
         return activeCrypto;
@@ -60,5 +61,8 @@ public abstract class Intention {
 
     public abstract String shippingAddress();
 
+    Crypto cryptoWithName(List<Crypto> quotes, String cryptoName) {
+        return quotes.stream().filter(quote -> cryptoName.equals(quote.getName())).findFirst().get();
+    }
 
 }

@@ -8,6 +8,11 @@ public class PurchaseIntention extends Intention {
         super(activeCrypto, nominalAmount, cryptoPrice, operationAmount, user, quotes);
     }
 
+    public Boolean thePriceIsNotWithinTheAllowedLimit(List<Crypto> quotes) {
+        Crypto crypto = super.cryptoWithName(quotes, super.getActiveCrypto());
+        return crypto.getPrice() > super.getCryptoPrice();
+    }
+
     @Override
     public String shippingAddress() {
         return getUser().getWalletAddress();

@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Transaction {
 
@@ -39,8 +40,16 @@ public class Transaction {
         this.status = new TransferStatus();
     }
 
-    public void confirmedTransfer(LocalDateTime completeDate) throws UserException {
-        status.confirmedTransfer(this, completeDate);
+    public void confirmedTransfer(LocalDateTime completeDate, List<Crypto> quotes) throws UserException {
+        if (this.theSystemPriceIsAboveOfThePriceStatedByTheUser(quotes)) {
+            this.status = new CanceledState();
+        }else {
+            status.confirmedTransfer(this, completeDate);
+        }
+    }
+
+    private boolean theSystemPriceIsAboveOfThePriceStatedByTheUser(List<Crypto> quotes) {
+        return intention.thePriceIsNotWithinTheAllowedLimit(quotes);
     }
 
     public void completeTransaction(LocalDateTime completeDate) {
