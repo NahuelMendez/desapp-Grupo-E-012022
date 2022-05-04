@@ -18,7 +18,7 @@ public abstract class Intention {
     private int cryptoPrice;
     @Column
     private int operationAmount;
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     private User user;
 
     public Intention(String activeCrypto, int nominalAmount, int cryptoPrice, int operationAmount, User user, List<Crypto> quotes) throws UserException {

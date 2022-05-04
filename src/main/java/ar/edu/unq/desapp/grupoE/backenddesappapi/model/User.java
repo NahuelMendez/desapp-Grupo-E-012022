@@ -45,8 +45,8 @@ public class User {
     private int operationsAmount = 0;
     @Column
     private String walletAddress;
-    @OneToMany(targetEntity= Intention.class, fetch=FetchType.EAGER) //Revisar
-    private ArrayList<Intention> intentions;
+    @OneToMany(targetEntity=Intention.class, fetch=FetchType.EAGER) //Revisar
+    private List<Intention> intentions;
     private Integer badPointsReputation = 0;
 
     public User() {
