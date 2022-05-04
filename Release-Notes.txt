@@ -2,7 +2,7 @@
 RELEASE NOTES
 
 ---------------------------------------------------------------------
-TAG ENTREGA1 1.0
+TAG ENTREGA1 1.0 -> https://github.com/NahuelMendez/desapp-Grupo-E-012022/releases/tag/Entrega1_v1.0
 ---------------------------------------------------------------------
 
 NEW FEATURES:
