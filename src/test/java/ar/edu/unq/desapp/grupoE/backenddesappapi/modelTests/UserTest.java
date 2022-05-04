@@ -7,19 +7,20 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
 
     @Test
     public void anUserHasNameLastNameEmailAddressPasswordCVUAndWalletAddress() throws UserException {
-        User user = anUser();
+        User user = anUser().build();
 
-        assertEquals("Pepe", user.getFirstName());
-        assertEquals("Pepa", user.getLastName());
-        assertEquals("email@gmail.com", user.getEmail());
-        assertEquals("San Martin 185", user.getAddress());
-        assertEquals("unaPassw123??", user.getPassword());
+        assertEquals("Example First Name", user.getFirstName());
+        assertEquals("Example Last Name", user.getLastName());
+        assertEquals("default@gmail.com", user.getEmail());
+        assertEquals("Default address 123", user.getAddress());
+        assertEquals("DefaultValidPass22!!", user.getPassword());
         assertEquals("1234567891234567891234", user.getCvu());
         assertEquals("12345678", user.getWalletAddress());
 
@@ -27,7 +28,7 @@ public class UserTest {
 
     @Test
     public void anUserNotHaveAPurchaseIntention() throws UserException {
-        User user = anUser();
+        User user = anUser().build();
 
         List<Intention> intentions = user.getIntentions();
 
@@ -46,7 +47,7 @@ public class UserTest {
     @Test
     public void aUserNameShouldntHaveLessThan3Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Ho", "Pepa", "email@gmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withFirstName("Ho").build();
         });
 
         assertEquals(User.USERNAME_ERROR_MESSAGE, thrown.getMessage());
@@ -55,7 +56,7 @@ public class UserTest {
     @Test
     public void aUserNameShouldntHaveMoreThan30Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("QWERTYUIOPASDFGHJKLÑZXCVBNMQWERTYUIOPASDFG", "Pepa", "email@gmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withFirstName("QWERTYUIOPASDFGHJKLÑZXCVBNMQWERTYUIOPASDFG").build();
         });
 
         assertEquals(User.USERNAME_ERROR_MESSAGE, thrown.getMessage());
@@ -64,7 +65,7 @@ public class UserTest {
     @Test
     public void aUserLastNameShouldntHaveLessThan3Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepe", "Ho", "email@gmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withLastName("Ho").build();
         });
 
         assertEquals(User.USERNAME_ERROR_MESSAGE, thrown.getMessage());
@@ -73,7 +74,7 @@ public class UserTest {
     @Test
     public void aUserLastNameShouldntHaveMoreThan30Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepita", "QWERTYUIOPASDFGHJKLÑZXCVBNMQWERTYUIOPASDFG", "email@gmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withLastName("QWERTYUIOPASDFGHJKLÑZXCVBNMQWERTYUIOPASDFG").build();
         });
 
         assertEquals(User.USERNAME_ERROR_MESSAGE, thrown.getMessage());
@@ -82,15 +83,15 @@ public class UserTest {
     @Test
     public void anUserShouldHaveAValidEmail() {
         UserException withoutArroba = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepin", "emailgmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withEmail("emailgmail.com").build();
         });
 
         UserException withoutDot = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepin", "email@gmailcom", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withEmail("email@gmailcom").build();
         });
 
         UserException without = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepin", "email@.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withEmail("email@.com").build();
         });
 
         assertEquals(User.USER_EMAIL_ERROR_MESSAGE, withoutArroba.getMessage());
@@ -101,7 +102,7 @@ public class UserTest {
     @Test
     public void anUserAddressShouldntHaveMoreThan30Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepi", "email@gmail.com", "QWERTYUIOPASDFGHJKLÑZXCVBNMQWERTYUIOPASDFG", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withAddress("QWERTYUIOPASDFGHJKLÑZXCVBNMQWERTYUIOPASDFG").build();
         });
 
         assertEquals(User.USER_ADDRESS_ERROR_MESSAGE, thrown.getMessage());
@@ -110,7 +111,7 @@ public class UserTest {
     @Test
     public void anUserAddressShouldntHaveLessThan10Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepi", "email@gmail.com", "QWERT", getValidPassword(), "1234567891234567891234", "12345678");
+            anUser().withAddress("QWERT").build();
         });
 
         assertEquals(User.USER_ADDRESS_ERROR_MESSAGE, thrown.getMessage());
@@ -119,7 +120,7 @@ public class UserTest {
     @Test
     public void anUserCVUShouldntHaveMoreThan22Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepi", "email@gmail.com", "QWERTERTYQWERTYT", getValidPassword(), "123456789123456789123456789", "12345678");
+            anUser().withCVU("123456789123456789123456789").build();
         });
 
         assertEquals(User.CVU_ERROR_MESSAGE, thrown.getMessage());
@@ -128,7 +129,7 @@ public class UserTest {
     @Test
     public void anUserCVUShouldHaveOnlyDigits() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepi", "email@gmail.com", "QWERTERTYQWERTYT", getValidPassword(), "1234567a9123456789123b", "12345678");
+            anUser().withCVU("1234567a9123456789123b").build();
         });
 
         assertEquals(User.CVU_ERROR_MESSAGE, thrown.getMessage());
@@ -137,7 +138,7 @@ public class UserTest {
     @Test
     public void anUserWalletAddressShouldntHaveMoreThan8Length() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepi", "email@gmail.com", "QWERTERTYQWERTYT", getValidPassword(), "1234567891234567891234", "145678");
+            anUser().withWalletAddress("145678").build();
         });
 
         assertEquals(User.WALLET_ADDRESS_ERROR_MESSAGE, thrown.getMessage());
@@ -146,7 +147,7 @@ public class UserTest {
     @Test
     public void anUserWalletAddressShouldHaveOnlyDigits() {
         UserException thrown = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepi", "email@gmail.com", "QWERTERTYQWERTYT", getValidPassword(), "1234567891234567891234", "123AV678");
+            anUser().withWalletAddress("123AV678").build();
         });
 
         assertEquals(User.WALLET_ADDRESS_ERROR_MESSAGE, thrown.getMessage());
@@ -155,19 +156,19 @@ public class UserTest {
     @Test
     public void anUserShouldHaveAValidPassword() {
         UserException withoutLoweCase = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepin", "email@gmail.com", "San Martin 185", "PASSWORD??", "1234567891234567891234", "12345678");
+            anUser().withPassword("PASSWORD??").build();
         });
 
         UserException withoutUpperCase = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepin", "email@gmail.com", "San Martin 185", "unapassword", "1234567891234567891234", "12345678");
+            anUser().withPassword("unapassword").build();
         });
 
         UserException withoutSpecialCharacter = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepin", "email@gmail.com", "San Martin 185", "unaPassword", "1234567891234567891234", "12345678");
+            anUser().withPassword("unaPassword").build();
         });
 
         UserException without6Length = assertThrows(UserException.class, () -> {
-            new User("Pepita", "Pepin", "email@gmail.com", "San Martin 185", "paSS?", "1234567891234567891234", "12345678");
+            anUser().withPassword("paSS?").build();
         });
 
         assertEquals(User.PASSWORD_ERROR_MESSAGE, withoutLoweCase.getMessage());
@@ -176,16 +177,8 @@ public class UserTest {
         assertEquals(User.PASSWORD_ERROR_MESSAGE, without6Length.getMessage());
     }
 
-    public User anUser() throws UserException {
-        return new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", getValidPassword(), "1234567891234567891234", "12345678");
-    }
-
-    private String getValidPassword() {
-        return "unaPassw123??";
-    }
-
     private User getUserWithPurchaseIntention() throws UserException {
-        User user = anUser();
+        User user = anUser().build();
         Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
         List<Crypto> quotes = Collections.singletonList(crypto);
         PurchaseIntention purchase = new PurchaseIntention("ALICEUSDT", 200, 120, 5000, user, quotes);
@@ -194,7 +187,7 @@ public class UserTest {
     }
 
     private User getUserWithSaleIntention(String cryptoName, int nominalAmount) throws UserException {
-        User user = anUser();
+        User user = anUser().build();
         Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
         List<Crypto> quotes = Collections.singletonList(crypto);
         SaleIntention sale = new SaleIntention(cryptoName, nominalAmount, 120, 5000, user, quotes);
