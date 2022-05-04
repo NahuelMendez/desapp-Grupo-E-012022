@@ -1,0 +1,37 @@
+
+RELEASE NOTES
+
+---------------------------------------------------------------------
+TAG ENTREGA1 1.0
+---------------------------------------------------------------------
+
+NEW FEATURES:
+* En el modelo se implementaron:
+    - Usuario:
+        -- Informacion del usuario con validaciones.
+        -- Funcionalidad para expresar una intencion.
+        -- Operaciones con Transacciones.
+        -- Calculo de reputacion.
+
+    - Jerarquia de Intenciones:
+        -- Intencion de compra.
+        -- Intencion de Venta.
+        -- Validaciones de cotizacion.
+
+    - Transacciones:
+        -- Operaciones de transferencia realizada, confirmar transferencia y cancelar transaccion.
+        -- Validaciones para los estados de la transaccion.
+        -- Calculo de reputacion o puntos que se les otorgara a los usuarios.
+
+    - Crypto:
+        -- Informacion de cotizacion.
+
+* Funcionalidades:
+    - Proveer servicio de registracion de usuario con validaciones.
+
+NOTES:
+* Se implemento la funcionalidad de obtener todos los usuarios con el fin de comprobar el correcto funcionamiento de "Registrar usuario".
+* Falta validaciones en las acciones que se realizan en una transaccion segun el rol en la operacion (comprador o vendedor).
+
+KNOWN ISSUES:
+* La informacion que se obtiene al pedir todos los usuarios no es la correcta.
