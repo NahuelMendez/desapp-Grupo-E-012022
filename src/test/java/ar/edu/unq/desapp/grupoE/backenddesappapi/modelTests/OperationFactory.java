@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
+
 public class OperationFactory {
 
     public static List<Crypto> updatedQuotes() {
@@ -24,6 +26,20 @@ public class OperationFactory {
 
     public static SaleIntention aSaleIntention(User user, List<Crypto> quotes, Integer price) throws UserException {
         return new SaleIntention("ALICEUSDT", 200, price, 5000, user, quotes);
+    }
+
+    public static User getUserWithPurchaseIntention() throws UserException {
+        User user = anUser().build();
+        PurchaseIntention purchase = aPurchaseIntention(user, updatedQuotes(), 120);
+        user.expressIntention(purchase);
+        return user;
+    }
+
+    public static User getUserWithSaleIntention() throws UserException {
+        User user = anUser().build();
+        Intention sale = aSaleIntention(user, updatedQuotes(), 120); ;
+        user.expressIntention(sale);
+        return user;
     }
 
 }

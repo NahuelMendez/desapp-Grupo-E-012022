@@ -2,11 +2,9 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.OperationFactory.getUserWithPurchaseIntention;
 import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -155,44 +153,18 @@ public class UserTest {
 
     @Test
     public void anUserShouldHaveAValidPassword() {
-        UserException withoutLoweCase = assertThrows(UserException.class, () -> {
-            anUser().withPassword("PASSWORD??").build();
-        });
-
-        UserException withoutUpperCase = assertThrows(UserException.class, () -> {
-            anUser().withPassword("unapassword").build();
-        });
-
-        UserException withoutSpecialCharacter = assertThrows(UserException.class, () -> {
-            anUser().withPassword("unaPassword").build();
-        });
-
-        UserException without6Length = assertThrows(UserException.class, () -> {
-            anUser().withPassword("paSS?").build();
-        });
-
-        assertEquals(User.PASSWORD_ERROR_MESSAGE, withoutLoweCase.getMessage());
-        assertEquals(User.PASSWORD_ERROR_MESSAGE, withoutUpperCase.getMessage());
-        assertEquals(User.PASSWORD_ERROR_MESSAGE, withoutSpecialCharacter.getMessage());
-        assertEquals(User.PASSWORD_ERROR_MESSAGE, without6Length.getMessage());
+        assertThrowInvalidPasswordMessage("PASSWORD??");
+        assertThrowInvalidPasswordMessage("unapassword");
+        assertThrowInvalidPasswordMessage("unaPassword");
+        assertThrowInvalidPasswordMessage("paSS?");
     }
 
-    private User getUserWithPurchaseIntention() throws UserException {
-        User user = anUser().build();
-        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
-        List<Crypto> quotes = Collections.singletonList(crypto);
-        PurchaseIntention purchase = new PurchaseIntention("ALICEUSDT", 200, 120, 5000, user, quotes);
-        user.expressIntention(purchase);
-        return user;
-    }
+    private void assertThrowInvalidPasswordMessage(String password) {
+        UserException thrown = assertThrows(UserException.class, () -> {
+            anUser().withPassword(password).build();
+        });
 
-    private User getUserWithSaleIntention(String cryptoName, int nominalAmount) throws UserException {
-        User user = anUser().build();
-        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
-        List<Crypto> quotes = Collections.singletonList(crypto);
-        SaleIntention sale = new SaleIntention(cryptoName, nominalAmount, 120, 5000, user, quotes);
-        user.expressIntention(sale);
-        return user;
+        assertEquals(User.PASSWORD_ERROR_MESSAGE, thrown.getMessage());
     }
 
 }
