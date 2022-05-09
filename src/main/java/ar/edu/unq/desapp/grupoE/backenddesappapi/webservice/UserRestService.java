@@ -27,8 +27,8 @@ public class UserRestService {
         return ResponseEntity.ok().body(list);
     }
 
-    @PostMapping(value = "/api/users", consumes = {MediaType.ALL_VALUE})
-    public UserDTO registrar(@Valid @RequestBody UserDTO userDTO) throws UserException {
+    @PostMapping(value = "/api/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public UserDTO register(@Valid @RequestBody UserDTO userDTO) throws UserException {
         User user = userDTO.createUser();
         userService.save(user);
         return userDTO;
