@@ -6,11 +6,11 @@ public class CanceledState extends TransactionState {
 
     @Override
     public void confirmedTransfer(Transaction transaction, LocalDateTime completeDate) throws UserException {
-        transaction.cancelCompleteTransaction();
+        transaction.throwConfirmTransferException();
     }
 
     @Override
     public void successfulTransfer(Transaction transaction) throws UserException {
-        transaction.cancelTransfer();
+        transaction.throwMadeTransferException();
     }
 }

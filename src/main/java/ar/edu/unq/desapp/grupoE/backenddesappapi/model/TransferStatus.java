@@ -11,6 +11,6 @@ public class TransferStatus extends TransactionState {
 
     @Override
     public void successfulTransfer(Transaction transaction) throws UserException {
-        transaction.cancelTransfer();
+        transaction.throwMadeTransferException();
     }
 }

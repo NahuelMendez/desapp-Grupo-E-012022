@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.OperationFactory.*;
 import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
@@ -77,7 +76,7 @@ public class TransactionTest {
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         UserException thrown = assertThrows(UserException.class,  () -> {
-            transaction.confirmedTransfer(date, updatedQuotes());
+            transaction.confirmTransferFor(seller, date, updatedQuotes());
         });
 
         assertEquals(Transaction.CANNOT_CONFIRM_TRANSFER, thrown.getMessage());
@@ -93,7 +92,9 @@ public class TransactionTest {
 
         transaction.cancelOperation(buyer);
 
-        UserException thrown = assertThrows(UserException.class, transaction::successfulTransfer);
+        UserException thrown = assertThrows(UserException.class, () ->
+                transaction.doTransfer(buyer)
+        );
 
         assertEquals(Transaction.CANNOT_MADE_TRANSFER, thrown.getMessage());
     }
@@ -106,8 +107,8 @@ public class TransactionTest {
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
-        transaction.successfulTransfer();
-        transaction.confirmedTransfer(date, quotesWithCryptoPrice(140));
+        transaction.doTransfer(buyer);
+        transaction.confirmTransferFor(seller, date, quotesWithCryptoPrice(140));
 
         assertEquals(0, buyer.getReputation());
         assertEquals(0, seller.getReputation());
@@ -123,13 +124,61 @@ public class TransactionTest {
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
-        transaction.successfulTransfer();
-        transaction.confirmedTransfer(date, quotesWithCryptoPrice(100));
+        transaction.doTransfer(buyer);
+        transaction.confirmTransferFor(seller, date, quotesWithCryptoPrice(100));
 
         assertEquals(0, buyer.getReputation());
         assertEquals(0, seller.getReputation());
         assertEquals(0, buyer.getOperationsAmount());
         assertEquals(0, seller.getOperationsAmount());
+    }
+
+    @Test
+    public void sellerCannotIndicateThatMadeTheTransfer() throws UserException {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        Intention sale = aSaleIntention(seller, quotesWithCryptoPrice(120), 120);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        UserException thrown = assertThrows(UserException.class, () -> {
+            transaction.doTransfer(seller);
+        });
+
+        assertEquals(Transaction.CANNOT_MADE_TRANSFER, thrown.getMessage());
+    }
+
+    @Test
+    public void buyerCannotConfirmTheTransfer() throws UserException {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        Intention sale = aSaleIntention(seller, quotesWithCryptoPrice(120), 120);
+        seller.expressIntention(sale);
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        transaction.doTransfer(buyer);
+
+        UserException thrown = assertThrows(UserException.class, () -> {
+            transaction.confirmTransferFor(buyer, date, quotesWithCryptoPrice(100));
+        });
+
+        assertEquals(Transaction.CANNOT_CONFIRM_TRANSFER, thrown.getMessage());
+    }
+
+    @Test
+    public void AnUserWhoDoesNotParticipatesInTheTransactionCannotCancelIt() throws UserException {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        Intention sale = aSaleIntention(seller, quotesWithCryptoPrice(120), 120);
+        seller.expressIntention(sale);
+        User otherUser = anUser().build();
+
+        Transaction transaction = new Transaction(date, buyer, seller, sale);
+
+        UserException thrown = assertThrows(UserException.class, () -> {
+            transaction.cancelOperation(otherUser);
+        });
+
+        assertEquals(Transaction.CANNOT_CANCEL_TRANSFER, thrown.getMessage());
     }
 
     private void doTransactionWithin30Minutes( User buyer, User seller) throws UserException {
@@ -139,8 +188,8 @@ public class TransactionTest {
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
-        transaction.successfulTransfer();
-        transaction.confirmedTransfer(date, updatedQuotes());
+        transaction.doTransfer(buyer);
+        transaction.confirmTransferFor(seller, date, updatedQuotes());
     }
 
     private void doTransactionPassingThe30Minutes(User buyer, User seller) throws UserException {
@@ -151,8 +200,8 @@ public class TransactionTest {
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
-        transaction.successfulTransfer();
-        transaction.confirmedTransfer(postDate, updatedQuotes());
+        transaction.doTransfer(buyer);
+        transaction.confirmTransferFor(seller, postDate, updatedQuotes());
     }
 
 }

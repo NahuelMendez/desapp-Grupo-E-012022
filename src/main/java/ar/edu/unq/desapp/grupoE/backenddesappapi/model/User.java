@@ -34,7 +34,7 @@ public class User {
     private String walletAddress;
     @OneToMany(targetEntity=Intention.class, fetch=FetchType.EAGER)
     private List<Intention> intentions;
-    private Integer badPointsReputation = 0;
+    private Integer reputationPoints = 0;
 
     public User() {
         super();
@@ -81,9 +81,9 @@ public class User {
 
     public Integer getReputation() {
         if (operationsAmount == 0) {
-            return badPointsReputation;
+            return reputationPoints;
         }
-        return points / operationsAmount + badPointsReputation;
+        return points / operationsAmount + reputationPoints;
     }
 
     public Integer getOperationsAmount() {
@@ -94,8 +94,8 @@ public class User {
         intentions.add(intention);
     }
 
-    public void cancelTransaction() {
-        badPointsReputation = badPointsReputation - 20;
+    public void subtractReputationPoints() {
+        reputationPoints = reputationPoints - 20;
     }
 
     public void completeTransaction(int points) {

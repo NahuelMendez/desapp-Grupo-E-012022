@@ -22,6 +22,7 @@ NEW FEATURES:
         -- Operaciones de transferencia realizada, confirmar transferencia y cancelar transaccion.
         -- Validaciones para los estados de la transaccion.
         -- Calculo de reputacion o puntos que se les otorgara a los usuarios.
+        -- Validacion de acciones segun rol vendedor/comprador
 
     - Crypto:
         -- Informacion de cotizacion.
@@ -31,7 +32,6 @@ NEW FEATURES:
 
 NOTES:
 * Se implemento la funcionalidad de obtener todos los usuarios con el fin de comprobar el correcto funcionamiento de "Registrar usuario".
-* Falta validaciones en las acciones que se realizan en una transaccion segun el rol en la operacion (comprador o vendedor).
 
 KNOWN ISSUES:
 * La informacion que se obtiene al pedir todos los usuarios no es la correcta.
