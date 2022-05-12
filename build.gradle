@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 	id 'war'
 	id 'idea'
+	id "org.sonarqube" version "3.3"
 }
 
 compileJava.options.encoding = "utf-8"
@@ -24,6 +25,14 @@ repositories {
 	mavenLocal()
 	jcenter()
 	mavenCentral()
+}
+
+sonarqube {
+	properties {
+		property "sonar.projectKey", "NahuelMendez_desapp-Grupo-E-012022"
+		property "sonar.organization", "nahuelmendez"
+		property "sonar.host.url", "https://sonarcloud.io"
+	}
 }
 
 dependencies {
