@@ -30,11 +30,11 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-      with:
-        arguments: build
-        gradle-version: '7.4.1'
+    #- name: Build with Gradle
+     # uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+      #with:
+       # arguments: build
+        #gradle-version: '7.4.1'
     - name: Cache SonarCloud packages
       uses: actions/cache@v1
       with:
