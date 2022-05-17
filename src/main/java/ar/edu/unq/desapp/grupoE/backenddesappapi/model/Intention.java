@@ -9,6 +9,7 @@ public abstract class Intention {
 
     public static final String CANNOT_CREATE_INTENTION = "Cannot create intention";
     @Id
+    @GeneratedValue
     private Integer id;
     @Column
     private String activeCrypto;
@@ -20,6 +21,8 @@ public abstract class Intention {
     private int operationAmount;
     @ManyToOne(fetch=FetchType.EAGER)
     private User user;
+
+    public Intention(){super();}
 
     public Intention(String activeCrypto, int nominalAmount, int cryptoPrice, int operationAmount, User user, List<Crypto> quotes) throws UserException {
         assertPriceIsOutsideTheVariationMarginOfFivePercent(quotes, activeCrypto, cryptoPrice);
