@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @EnableAutoConfiguration
 @Validated
-public class UserRestService {
+public class UserController {
 
     @Autowired
     private UserService userService;
