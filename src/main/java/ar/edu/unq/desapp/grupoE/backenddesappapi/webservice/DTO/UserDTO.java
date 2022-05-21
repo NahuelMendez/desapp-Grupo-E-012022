@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;

@@ -5,6 +5,8 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.IntentionService;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.UserService;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.UserDTO;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
@@ -27,9 +29,10 @@ public class UserRestService {
     private IntentionService intentionService;
 
     @GetMapping("/api/users")
-    public ResponseEntity<List<User>> allUsers() {
+    public ResponseEntity<List<UserResponse>> allUsers() {
         List<User> list = userService.findAll();
-        return ResponseEntity.ok().body(list);
+        List<UserResponse> response = list.stream().map(UserResponse::new).collect(Collectors.toList());
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping(value = "/api/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
