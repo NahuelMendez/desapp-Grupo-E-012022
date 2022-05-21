@@ -68,4 +68,5 @@ public abstract class Intention {
         return quotes.stream().filter(quote -> cryptoName.equals(quote.getName())).findFirst().get();
     }
 
+    public abstract String intentionType();
 }

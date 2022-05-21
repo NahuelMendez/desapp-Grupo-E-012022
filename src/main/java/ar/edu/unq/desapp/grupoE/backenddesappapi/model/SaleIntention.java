@@ -22,4 +22,9 @@ public class SaleIntention extends Intention {
     public String shippingAddress() {
         return getUser().getCvu();
     }
+
+    @Override
+    public String intentionType() {
+        return "sale";
+    }
 }

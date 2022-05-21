@@ -32,9 +32,9 @@ public class UserService {
     public void expressIntention(Integer id, String crypto, Integer nominalAmount, Integer cryptoPrice, Integer operationAmount, String operation) throws UserException {
         User user = userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
         Intention intention = createIntention(crypto, nominalAmount, cryptoPrice, operationAmount, operation, user, updatedQuotes());
-//        user.expressIntention(intention);
+        user.expressIntention(intention);
         intentionRepository.save(intention);
-//        userRepository.save(user);
+        userRepository.save(user);
     }
 
     private Intention createIntention(String crypto, Integer nominalAmount, Integer cryptoPrice, Integer operationAmount, String operation, User user, List<Crypto> quotes) throws UserException {
@@ -43,7 +43,7 @@ public class UserService {
         }else if (operation.equals("sale")) {
             return new SaleIntention(crypto, nominalAmount, cryptoPrice, operationAmount, user, quotes);
         }else {
-            throw new UserException("No se puede crear la intention");
+            throw new UserException("No se puede crear la intention de tipo " + crypto + ".La intencion debe ser de tipo buy o sale");
         }
     }
 

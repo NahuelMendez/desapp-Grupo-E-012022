@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Intention;
 
@@ -8,13 +8,19 @@ public class IntentionResponse {
     private final Integer cryptoPrice;
     private final Integer operationAmount;
     private final SimpleUser user;
+    private final String intentionType;
 
     public IntentionResponse(Intention intention) {
+        this.intentionType = intention.intentionType();
         this.crypto = intention.getActiveCrypto();
         this.nominalAmount = intention.getNominalAmount();
         this.cryptoPrice = intention.getCryptoPrice();
         this.operationAmount = intention.getOperationAmount();
         this.user = new SimpleUser(intention.getUser());
+    }
+
+    public String getIntentionType() {
+        return intentionType;
     }
 
     public String getCrypto() {
@@ -37,10 +43,4 @@ public class IntentionResponse {
         return user;
     }
 
-    /*○ Hora
-      ○ Criptoactivo
-      ○ Cantidad nominal del Cripto Activo
-      ○ Cotización del Cripto Activo
-      ○ Monto de la operación en pesos ARG
-      .*/
 }

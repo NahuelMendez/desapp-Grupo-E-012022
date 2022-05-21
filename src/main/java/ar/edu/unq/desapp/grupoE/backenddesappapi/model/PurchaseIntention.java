@@ -21,4 +21,9 @@ public class PurchaseIntention extends Intention {
     public String shippingAddress() {
         return getUser().getWalletAddress();
     }
+
+    @Override
+    public String intentionType() {
+        return "buy";
+    }
 }

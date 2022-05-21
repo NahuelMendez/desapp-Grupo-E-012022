@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +32,4 @@ public class SimpleUser {
         return reputation;
     }
 
-    /*○ Usuario (Nombre/Apellido)
-      ○ Cantidad de operacion
-      ○ Reputación, se calcula como cantidad de puntos otorgados / cantidad de
-        operaciones. Si la persona no ha operado se muestra “Sin operaciones”*/
 }
