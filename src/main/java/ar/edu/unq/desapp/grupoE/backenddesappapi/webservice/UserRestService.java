@@ -33,14 +33,14 @@ public class UserRestService {
     }
 
     @PostMapping(value = "/api/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public UserDTO register(@Valid @RequestBody UserDTO userDTO) throws UserException {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) throws UserException {
         User user = userDTO.createUser();
         userService.save(user);
-        return userDTO;
+        return ResponseEntity.ok().body(userDTO);
     }
 
     @PostMapping(value = "/api/users/{id}/intention", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public IntentionDTO expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
+    public ResponseEntity<IntentionDTO> expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
         userService.expressIntention(
                 id,
                 intentionDTO.getCrypto(),
@@ -48,11 +48,11 @@ public class UserRestService {
                 intentionDTO.getCryptoPrice(),
                 intentionDTO.getOperationAmount(),
                 intentionDTO.getOperation());
-        return intentionDTO;
+        return ResponseEntity.ok().body(intentionDTO);
     }
 
     @GetMapping("/api/users/intentions")
-    public ResponseEntity<List<IntentionResponse>> allIntention() {
+    public ResponseEntity<List<IntentionResponse>> allActiveIntention() {
         List<Intention> list = intentionService.findAll();
         List<IntentionResponse> response = list.stream().map(IntentionResponse::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(response);
