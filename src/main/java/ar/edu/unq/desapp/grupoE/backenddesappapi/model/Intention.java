@@ -21,6 +21,8 @@ public abstract class Intention {
     private int operationAmount;
     @ManyToOne(fetch=FetchType.EAGER)
     private User user;
+    @Column
+    private Boolean active = true;
 
     public Intention(){super();}
 
@@ -69,4 +71,16 @@ public abstract class Intention {
     }
 
     public abstract String intentionType();
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void disable() {
+        this.active = false;
+    }
+
+    public void activate() {
+        this.active = true;
+    }
 }
