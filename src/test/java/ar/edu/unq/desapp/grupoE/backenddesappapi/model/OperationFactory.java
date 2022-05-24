@@ -1,12 +1,10 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
-
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserBuilder.anUser;
 
 public class OperationFactory {
 

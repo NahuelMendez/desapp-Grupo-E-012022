@@ -1,6 +1,5 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Crypto;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

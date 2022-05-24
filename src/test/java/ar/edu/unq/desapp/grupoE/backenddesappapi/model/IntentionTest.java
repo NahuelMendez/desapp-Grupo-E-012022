@@ -1,12 +1,11 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.OperationFactory.*;
-import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.OperationFactory.*;
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserBuilder.anUser;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;

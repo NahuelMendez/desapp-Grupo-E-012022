@@ -1,7 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
-
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 public class UserBuilder {
 
