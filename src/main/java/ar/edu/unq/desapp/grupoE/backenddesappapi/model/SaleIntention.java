@@ -1,8 +1,12 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
+import javax.persistence.Entity;
 import java.util.List;
 
+@Entity
 public class SaleIntention extends Intention {
+
+    public SaleIntention(){super();}
 
     public SaleIntention(String activeCrypto, int nominalAmount, int cryptoPrice, int operationAmount, User user, List<CryptoQuote> quotes) throws UserException {
         super(activeCrypto, nominalAmount, cryptoPrice, operationAmount, user, quotes);
@@ -17,5 +21,10 @@ public class SaleIntention extends Intention {
     @Override
     public String shippingAddress() {
         return getUser().getCvu();
+    }
+
+    @Override
+    public String intentionType() {
+        return "sale";
     }
 }

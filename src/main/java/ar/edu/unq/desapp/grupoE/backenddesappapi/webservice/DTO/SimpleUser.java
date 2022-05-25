@@ -1,18 +1,18 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
+import org.springframework.context.annotation.Bean;
 
-public class UserResponse {
-
+public class SimpleUser {
     private final String firstName;
     private final String lastName;
-    private final Integer operationsAmount;
+    private final Integer operationAmount;
     private final Integer reputation;
 
-    public UserResponse(User user) {
+    public SimpleUser(User user) {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        this.operationsAmount = user.getOperationsAmount();
+        this.operationAmount = user.getOperationsAmount();
         this.reputation = user.getReputation();
     }
 
@@ -24,11 +24,12 @@ public class UserResponse {
         return lastName;
     }
 
-    public Integer getOperationsAmount() {
-        return operationsAmount;
+    public Integer getOperationAmount() {
+        return operationAmount;
     }
 
     public Integer getReputation() {
         return reputation;
     }
+
 }

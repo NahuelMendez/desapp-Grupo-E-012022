@@ -1,10 +1,13 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 import java.util.List;
-import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.OperationFactory.*;
-import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.OperationFactory.*;
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserBuilder.anUser;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -20,6 +23,7 @@ public class IntentionTest {
         assertEquals(200, intention.getNominalAmount());
         assertEquals(120, intention.getCryptoPrice());
         assertEquals(5000, intention.getOperationAmount());
+        assertTrue(intention.isActive());
     }
 
     @Test
@@ -58,6 +62,33 @@ public class IntentionTest {
         });
 
         assertEquals(Intention.CANNOT_CREATE_INTENTION, thrownPurchase.getMessage());
+    }
+
+    @Test
+    public void WhenAnIntentionIsAddedToATransactionThenItIsDisable() throws UserException {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        User seller = anUser().build();
+        User buyer = anUser().build();
+        List<Crypto> quotes = updatedQuotes();
+        Intention intention = aSaleIntention(seller, quotes, 120);
+
+        new Transaction(date, buyer ,seller, intention);
+
+        assertFalse(intention.isActive());
+    }
+
+    @Test
+    public void WhenATransactionIsCanceledThenItIntentionIsActivated() throws UserException {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        User seller = anUser().build();
+        User buyer = anUser().build();
+        List<Crypto> quotes = updatedQuotes();
+        Intention intention = aSaleIntention(seller, quotes, 120);
+        Transaction transaction = new Transaction(date, buyer ,seller, intention);
+
+        transaction.cancelOperation(seller);
+
+        assertTrue(intention.isActive());
     }
 
 }

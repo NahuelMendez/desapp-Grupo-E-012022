@@ -1,11 +1,10 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
-import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.OperationFactory.getUserWithPurchaseIntention;
-import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.anUser;
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.OperationFactory.getUserWithPurchaseIntention;
+import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserBuilder.anUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {

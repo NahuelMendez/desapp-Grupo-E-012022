@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
 import org.junit.jupiter.api.Test;

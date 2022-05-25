@@ -15,6 +15,7 @@ public class Transaction {
     private Intention intention;
 
     public Transaction(LocalDateTime date, User buyer, User seller, Intention intention){
+        intention.disable();
         this.date = date;
         this.buyer = buyer;
         this.seller = seller;
@@ -25,6 +26,7 @@ public class Transaction {
     public void cancelOperation(User user) throws UserException {
         this.assertUserIsParticipant(user);
         user.subtractReputationPoints();
+        intention.activate();
         this.status = new CanceledState();
     }
 
