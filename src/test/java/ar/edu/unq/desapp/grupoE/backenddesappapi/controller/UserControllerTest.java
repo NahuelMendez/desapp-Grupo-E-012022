@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.controller;
 
+import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.SimpleUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
