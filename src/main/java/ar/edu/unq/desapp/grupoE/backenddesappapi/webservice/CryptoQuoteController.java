@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @EnableAutoConfiguration
 @Validated
@@ -20,6 +22,11 @@ public class CryptoQuoteController {
     @GetMapping("/api/crypto/{symbol}")
     public ResponseEntity<CryptoQuote> getCryptoQuotes(@PathVariable("symbol") String symbol){
         return  ResponseEntity.ok().body(this.cryptoQuoteService.getCryptoQuote(symbol));
+    }
+
+    @GetMapping("/api/crypto")
+    public ResponseEntity<List<CryptoQuote>> getAllCryptoQuotes(){
+        return ResponseEntity.ok().body(this.cryptoQuoteService.getAllCryptoQuotes());
     }
 
 }

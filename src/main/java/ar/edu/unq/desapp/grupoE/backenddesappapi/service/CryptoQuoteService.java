@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CryptoQuoteService {
@@ -13,8 +14,14 @@ public class CryptoQuoteService {
 
     @Transactional
     public CryptoQuote getCryptoQuote(String symbol){
-        CryptoQuoteResponse cryptoQuoteResponse = this.cryptoQuoteProvider.getCryptoQuoteBySymbol(symbol);
-        return new CryptoQuote(cryptoQuoteResponse.getSymbol(), Float.parseFloat(cryptoQuoteResponse.getPrice()), LocalDateTime.now());
+        return this.cryptoQuoteProvider.getCryptoQuoteBySymbol(symbol);
     }
+
+    @Transactional
+    public List<CryptoQuote> getAllCryptoQuotes(){
+        return this.cryptoQuoteProvider.getAllCryptoQuotes();
+    }
+
+
 
 }

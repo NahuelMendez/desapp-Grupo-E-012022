@@ -12,7 +12,7 @@ public class CryptoTest {
     @Test
     public void ACryptoHasANameAPriceAndUpdateTime() {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", 100f, date);
+        CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", 100d, date);
 
         assertEquals("ALICEUSDT", cryptoQuote.getName());
         assertEquals(100, cryptoQuote.getPrice());

@@ -11,11 +11,11 @@ import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.a
 public class OperationFactory {
 
     public static List<CryptoQuote> updatedQuotes() {
-        CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", 120f, LocalDateTime.now());
+        CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", 120d, LocalDateTime.now());
         return Collections.singletonList(cryptoQuote);
     }
 
-    public static List<CryptoQuote> quotesWithCryptoPrice(Float price) {
+    public static List<CryptoQuote> quotesWithCryptoPrice(Double price) {
         CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", price, LocalDateTime.now());
         return Collections.singletonList(cryptoQuote);
     }
