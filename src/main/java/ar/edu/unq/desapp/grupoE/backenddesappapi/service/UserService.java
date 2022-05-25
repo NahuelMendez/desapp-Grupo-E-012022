@@ -18,6 +18,7 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private IntentionRepository intentionRepository;
+    private final CryptoQuoteProvider cryptoQuoteProvider = new CryptoQuoteProvider();
 
     @Transactional
     public User save(User user) {
@@ -29,26 +30,25 @@ public class UserService {
     }
 
     @Transactional
-    public void expressIntention(Integer id, String crypto, Integer nominalAmount, Integer cryptoPrice, Integer operationAmount, String operation) throws UserException {
+    public void expressIntention(Integer id, String crypto, Integer nominalAmount, Double cryptoPrice, Integer operationAmount, String operation) throws UserException {
         User user = userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
-        Intention intention = createIntention(crypto, nominalAmount, cryptoPrice, operationAmount, operation, user, updatedQuotes());
+        Intention intention = createIntention(crypto, nominalAmount, cryptoPrice, operationAmount, operation, user, getCryptoQuote(crypto));
         user.expressIntention(intention);
         intentionRepository.save(intention);
         userRepository.save(user);
     }
 
-    private Intention createIntention(String crypto, Integer nominalAmount, Integer cryptoPrice, Integer operationAmount, String operation, User user, List<CryptoQuote> quotes) throws UserException {
+    private Intention createIntention(String crypto, Integer nominalAmount, Double cryptoPrice, Integer operationAmount, String operation, User user, CryptoQuote quote) throws UserException {
         if (operation.equals("buy")) {
-            return new PurchaseIntention(crypto, nominalAmount, cryptoPrice, operationAmount, user, quotes);
+            return new PurchaseIntention(crypto, nominalAmount, cryptoPrice, operationAmount, user, quote);
         }else if (operation.equals("sale")) {
-            return new SaleIntention(crypto, nominalAmount, cryptoPrice, operationAmount, user, quotes);
+            return new SaleIntention(crypto, nominalAmount, cryptoPrice, operationAmount, user, quote);
         }else {
             throw new UserException("No se puede crear la intention de tipo " + crypto + ".La intencion debe ser de tipo buy o sale");
         }
     }
 
-    public static List<CryptoQuote> updatedQuotes() {
-        CryptoQuote crypto = new CryptoQuote("ALICEUSDT", 120d, LocalDateTime.now());
-        return Collections.singletonList(crypto);
+    private CryptoQuote getCryptoQuote(String symbol) {
+        return this.cryptoQuoteProvider.getCryptoQuoteBySymbol(symbol);
     }
 }

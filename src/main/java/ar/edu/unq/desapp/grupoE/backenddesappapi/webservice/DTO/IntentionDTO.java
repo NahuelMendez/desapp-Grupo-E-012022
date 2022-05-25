@@ -8,14 +8,14 @@ public class IntentionDTO {
 
     private String crypto;
     private Integer nominalAmount;
-    private Integer cryptoPrice;
+    private Double cryptoPrice;
     private Integer operationAmount;
     private String operation;
 
     public IntentionDTO(
             String crypto,
             Integer nominalAmount,
-            Integer cryptoPrice,
+            Double cryptoPrice,
             Integer operationAmount,
             String operation) {
 
@@ -42,11 +42,11 @@ public class IntentionDTO {
         this.nominalAmount = nominalAmount;
     }
 
-    public Integer getCryptoPrice() {
+    public Double getCryptoPrice() {
         return cryptoPrice;
     }
 
-    public void setCryptoPrice(Integer cryptoPrice) {
+    public void setCryptoPrice(Double cryptoPrice) {
         this.cryptoPrice = cryptoPrice;
     }
 

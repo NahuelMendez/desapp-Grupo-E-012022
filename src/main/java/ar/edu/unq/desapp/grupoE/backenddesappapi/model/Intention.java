@@ -16,7 +16,7 @@ public abstract class Intention {
     @Column
     private int nominalAmount;
     @Column
-    private int cryptoPrice;
+    private Double cryptoPrice;
     @Column
     private int operationAmount;
     @ManyToOne(fetch=FetchType.EAGER)
@@ -26,8 +26,8 @@ public abstract class Intention {
 
     public Intention(){super();}
 
-    public Intention(String activeCrypto, int nominalAmount, int cryptoPrice, int operationAmount, User user, List<CryptoQuote> quotes) throws UserException {
-        assertPriceIsOutsideTheVariationMarginOfFivePercent(quotes, activeCrypto, cryptoPrice);
+    public Intention(String activeCrypto, int nominalAmount, Double cryptoPrice, int operationAmount, User user, CryptoQuote quote) throws UserException {
+        assertPriceIsOutsideTheVariationMarginOfFivePercent(quote, cryptoPrice);
         this.activeCrypto = activeCrypto;
         this.nominalAmount = nominalAmount;
         this.cryptoPrice = cryptoPrice;
@@ -35,14 +35,13 @@ public abstract class Intention {
         this.user = user;
     }
 
-    protected void assertPriceIsOutsideTheVariationMarginOfFivePercent(List<CryptoQuote> quotes, String cryptoName, Integer price) throws UserException {
-        CryptoQuote cryptoQuote = cryptoWithName(quotes, cryptoName);
-        if ((cryptoQuote.getPrice() * 0.05 <  Math.abs(price - cryptoQuote.getPrice()))) {
+    protected void assertPriceIsOutsideTheVariationMarginOfFivePercent(CryptoQuote quote, Double price) throws UserException {
+        if ((quote.getPrice() * 0.05 <  Math.abs(price - quote.getPrice()))) {
             throw new UserException(CANNOT_CREATE_INTENTION);
         }
     }
 
-    public abstract Boolean thePriceIsNotWithinTheAllowedLimit(List<CryptoQuote> quotes);
+    public abstract Boolean thePriceIsNotWithinTheAllowedLimit(CryptoQuote quote);
 
     public String getActiveCrypto(){
         return activeCrypto;
@@ -52,7 +51,7 @@ public abstract class Intention {
         return nominalAmount;
     }
 
-    public int getCryptoPrice() {
+    public Double getCryptoPrice() {
         return cryptoPrice;
     }
 
@@ -65,10 +64,6 @@ public abstract class Intention {
     }
 
     public abstract String shippingAddress();
-
-    CryptoQuote cryptoWithName(List<CryptoQuote> quotes, String cryptoName) {
-        return quotes.stream().filter(quote -> cryptoName.equals(quote.getName())).findFirst().get();
-    }
 
     public abstract String intentionType();
 

@@ -44,7 +44,7 @@ public class TransactionTest {
     public void whenAnTransactionIsCancelledTheUserLoseReputation() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
 
-        SaleIntention sale = aSaleIntention(seller, updatedQuotes(), 125);
+        SaleIntention sale = aSaleIntention(seller, updatedQuote(), 125d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer ,seller, sale);
@@ -69,13 +69,13 @@ public class TransactionTest {
     @Test
     public void theTransferCannotBeConfirmedIfTheTransferWasNotMade() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        SaleIntention sale = aSaleIntention(seller, updatedQuotes(), 120);
+        SaleIntention sale = aSaleIntention(seller, updatedQuote(), 120d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         UserException thrown = assertThrows(UserException.class,  () -> {
-            transaction.confirmTransferFor(seller, date, updatedQuotes());
+            transaction.confirmTransferFor(seller, date, updatedQuote());
         });
 
         assertEquals(Transaction.CANNOT_CONFIRM_TRANSFER, thrown.getMessage());
@@ -84,7 +84,7 @@ public class TransactionTest {
     @Test
     public void theTransferCannotBeMadeIfTheTransactionWasCanceled() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        SaleIntention sale = aSaleIntention(seller, updatedQuotes(), 122);
+        SaleIntention sale = aSaleIntention(seller, updatedQuote(), 122d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
@@ -101,13 +101,13 @@ public class TransactionTest {
     @Test
     public void whenAPurchaseOperationIsCompleteButTheSystemPriceIsAboveOfThePriceStatedByTheUser() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        Intention sale = aPurchaseIntention(seller, quotesWithCryptoPrice(120d), 120);
+        Intention sale = aPurchaseIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.doTransfer(buyer);
-        transaction.confirmTransferFor(seller, date, quotesWithCryptoPrice(140d));
+        transaction.confirmTransferFor(seller, date, quoteWithCryptoPrice(140d));
 
         assertEquals(0, buyer.getReputation());
         assertEquals(0, seller.getReputation());
@@ -118,13 +118,13 @@ public class TransactionTest {
     @Test
     public void whenASaleOperationIsCompleteButTheSystemPriceIsBelowOfThePriceStatedByTheUser() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        Intention sale = aSaleIntention(seller, quotesWithCryptoPrice(120d), 120);
+        Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.doTransfer(buyer);
-        transaction.confirmTransferFor(seller, date, quotesWithCryptoPrice(100d));
+        transaction.confirmTransferFor(seller, date, quoteWithCryptoPrice(100d));
 
         assertEquals(0, buyer.getReputation());
         assertEquals(0, seller.getReputation());
@@ -135,7 +135,7 @@ public class TransactionTest {
     @Test
     public void sellerCannotIndicateThatMadeTheTransfer() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        Intention sale = aSaleIntention(seller, quotesWithCryptoPrice(120d), 120);
+        Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
@@ -150,7 +150,7 @@ public class TransactionTest {
     @Test
     public void buyerCannotConfirmTheTransfer() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        Intention sale = aSaleIntention(seller, quotesWithCryptoPrice(120d), 120);
+        Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
@@ -158,7 +158,7 @@ public class TransactionTest {
         transaction.doTransfer(buyer);
 
         UserException thrown = assertThrows(UserException.class, () -> {
-            transaction.confirmTransferFor(buyer, date, quotesWithCryptoPrice(100d));
+            transaction.confirmTransferFor(buyer, date, quoteWithCryptoPrice(100d));
         });
 
         assertEquals(Transaction.CANNOT_CONFIRM_TRANSFER, thrown.getMessage());
@@ -167,7 +167,7 @@ public class TransactionTest {
     @Test
     public void AnUserWhoDoesNotParticipatesInTheTransactionCannotCancelIt() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        Intention sale = aSaleIntention(seller, quotesWithCryptoPrice(120d), 120);
+        Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
         User otherUser = anUser().build();
 
@@ -182,25 +182,25 @@ public class TransactionTest {
 
     private void doTransactionWithin30Minutes( User buyer, User seller) throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        SaleIntention sale = aSaleIntention(seller, updatedQuotes(), 120);
+        SaleIntention sale = aSaleIntention(seller, updatedQuote(), 120d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.doTransfer(buyer);
-        transaction.confirmTransferFor(seller, date, updatedQuotes());
+        transaction.confirmTransferFor(seller, date, updatedQuote());
     }
 
     private void doTransactionPassingThe30Minutes(User buyer, User seller) throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         LocalDateTime postDate = LocalDateTime.of(2022, 4, 16, 21, 50);
-        SaleIntention sale = aSaleIntention(seller, updatedQuotes(), 120);
+        SaleIntention sale = aSaleIntention(seller, updatedQuote(), 120d);
         seller.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
         transaction.doTransfer(buyer);
-        transaction.confirmTransferFor(seller, postDate, updatedQuotes());
+        transaction.confirmTransferFor(seller, postDate, updatedQuote());
     }
 
 }

@@ -5,7 +5,7 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Intention;
 public class IntentionResponse {
     private final String crypto;
     private final Integer nominalAmount;
-    private final Integer cryptoPrice;
+    private final Double cryptoPrice;
     private final Integer operationAmount;
     private final SimpleUser user;
     private final String intentionType;
@@ -31,7 +31,7 @@ public class IntentionResponse {
         return nominalAmount;
     }
 
-    public Integer getCryptoPrice() {
+    public Double getCryptoPrice() {
         return cryptoPrice;
     }
 
