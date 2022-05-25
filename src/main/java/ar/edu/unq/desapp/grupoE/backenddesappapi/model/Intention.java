@@ -21,7 +21,7 @@ public abstract class Intention {
     @ManyToOne(fetch=FetchType.EAGER)
     private User user;
 
-    public Intention(String activeCrypto, int nominalAmount, int cryptoPrice, int operationAmount, User user, List<Crypto> quotes) throws UserException {
+    public Intention(String activeCrypto, int nominalAmount, int cryptoPrice, int operationAmount, User user, List<CryptoQuote> quotes) throws UserException {
         assertPriceIsOutsideTheVariationMarginOfFivePercent(quotes, activeCrypto, cryptoPrice);
         this.activeCrypto = activeCrypto;
         this.nominalAmount = nominalAmount;
@@ -30,14 +30,14 @@ public abstract class Intention {
         this.user = user;
     }
 
-    protected void assertPriceIsOutsideTheVariationMarginOfFivePercent(List<Crypto> quotes,String cryptoName,Integer price) throws UserException {
-        Crypto crypto = cryptoWithName(quotes, cryptoName);
-        if ((crypto.getPrice() * 0.05 <  Math.abs(price - crypto.getPrice()))) {
+    protected void assertPriceIsOutsideTheVariationMarginOfFivePercent(List<CryptoQuote> quotes, String cryptoName, Integer price) throws UserException {
+        CryptoQuote cryptoQuote = cryptoWithName(quotes, cryptoName);
+        if ((cryptoQuote.getPrice() * 0.05 <  Math.abs(price - cryptoQuote.getPrice()))) {
             throw new UserException(CANNOT_CREATE_INTENTION);
         }
     }
 
-    public abstract Boolean thePriceIsNotWithinTheAllowedLimit(List<Crypto> quotes);
+    public abstract Boolean thePriceIsNotWithinTheAllowedLimit(List<CryptoQuote> quotes);
 
     public String getActiveCrypto(){
         return activeCrypto;
@@ -61,7 +61,7 @@ public abstract class Intention {
 
     public abstract String shippingAddress();
 
-    Crypto cryptoWithName(List<Crypto> quotes, String cryptoName) {
+    CryptoQuote cryptoWithName(List<CryptoQuote> quotes, String cryptoName) {
         return quotes.stream().filter(quote -> cryptoName.equals(quote.getName())).findFirst().get();
     }
 

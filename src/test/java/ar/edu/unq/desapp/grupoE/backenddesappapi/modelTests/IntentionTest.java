@@ -13,7 +13,7 @@ public class IntentionTest {
     @Test
     public void anIntentionHasCryptoNominalAmountCryptoPriceAndOperationAmount() throws UserException {
         User user = anUser().build();
-        List<Crypto> quotes = updatedQuotes();
+        List<CryptoQuote> quotes = updatedQuotes();
         Intention intention = aSaleIntention(user, quotes, 120);
 
         assertEquals("ALICEUSDT", intention.getActiveCrypto());
@@ -25,7 +25,7 @@ public class IntentionTest {
     @Test
     public void aSaleIntentionGetCvuAddress() throws UserException {
         User user = anUser().build();
-        List<Crypto> quotes = updatedQuotes();
+        List<CryptoQuote> quotes = updatedQuotes();
         Intention intention = aSaleIntention(user, quotes, 120);
 
         String cvuAddress = user.getCvu();
@@ -36,7 +36,7 @@ public class IntentionTest {
     @Test
     public void aPurchaseIntentionGetWalletAddress() throws UserException {
         User user = anUser().build();
-        List<Crypto> quotes = updatedQuotes();
+        List<CryptoQuote> quotes = updatedQuotes();
         Intention intention = aPurchaseIntention(user, quotes, 120);
         String walletAddress = user.getWalletAddress();
 
@@ -46,13 +46,13 @@ public class IntentionTest {
     @Test
     public void anIntentionWithPriceOutsideTheVariationMarginOfFivePercent() throws UserException {
         User user = anUser().build();
-        List<Crypto> quotes = updatedQuotes();
+        List<CryptoQuote> quotes = updatedQuotes();
 
         assertThrowCannotCreateIntention(user, quotes, 127);
         assertThrowCannotCreateIntention(user, quotes, 113);
     }
 
-    private void assertThrowCannotCreateIntention(User user, List<Crypto> quotes, int price) {
+    private void assertThrowCannotCreateIntention(User user, List<CryptoQuote> quotes, int price) {
         UserException thrownPurchase = assertThrows(UserException.class, () -> {
             aPurchaseIntention(user, quotes, price);
         });

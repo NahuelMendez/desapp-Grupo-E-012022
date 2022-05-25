@@ -10,21 +10,21 @@ import static ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests.UserBuilder.a
 
 public class OperationFactory {
 
-    public static List<Crypto> updatedQuotes() {
-        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
-        return Collections.singletonList(crypto);
+    public static List<CryptoQuote> updatedQuotes() {
+        CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", 120d, LocalDateTime.now());
+        return Collections.singletonList(cryptoQuote);
     }
 
-    public static List<Crypto> quotesWithCryptoPrice(Integer price) {
-        Crypto crypto = new Crypto("ALICEUSDT", price, LocalDateTime.now());
-        return Collections.singletonList(crypto);
+    public static List<CryptoQuote> quotesWithCryptoPrice(Double price) {
+        CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", price, LocalDateTime.now());
+        return Collections.singletonList(cryptoQuote);
     }
 
-    public static PurchaseIntention aPurchaseIntention(User user, List<Crypto> quotes, Integer price) throws UserException {
+    public static PurchaseIntention aPurchaseIntention(User user, List<CryptoQuote> quotes, Integer price) throws UserException {
         return new PurchaseIntention("ALICEUSDT", 200, price, 5000, user, quotes);
     }
 
-    public static SaleIntention aSaleIntention(User user, List<Crypto> quotes, Integer price) throws UserException {
+    public static SaleIntention aSaleIntention(User user, List<CryptoQuote> quotes, Integer price) throws UserException {
         return new SaleIntention("ALICEUSDT", 200, price, 5000, user, quotes);
     }
 

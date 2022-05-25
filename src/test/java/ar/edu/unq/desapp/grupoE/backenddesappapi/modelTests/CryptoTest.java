@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.modelTests;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Crypto;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -12,10 +12,10 @@ public class CryptoTest {
     @Test
     public void ACryptoHasANameAPriceAndUpdateTime() {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        Crypto crypto = new Crypto("ALICEUSDT", 100, date);
+        CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", 100d, date);
 
-        assertEquals("ALICEUSDT", crypto.getName());
-        assertEquals(100, crypto.getPrice());
-        assertEquals(date, crypto.getUpdateTime());
+        assertEquals("ALICEUSDT", cryptoQuote.getName());
+        assertEquals(100, cryptoQuote.getPrice());
+        assertEquals(date, cryptoQuote.getUpdateTime());
     }
 }

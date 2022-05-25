@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @EnableAutoConfiguration
 @Validated
-public class UserRestService {
+public class UserController {
 
     @Autowired
     private UserService userService;

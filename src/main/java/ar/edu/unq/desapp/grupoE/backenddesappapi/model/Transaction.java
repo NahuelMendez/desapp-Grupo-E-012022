@@ -43,7 +43,7 @@ public class Transaction {
         this.status = new TransferStatus();
     }
 
-    public void confirmTransferFor(User user, LocalDateTime completeDate, List<Crypto> quotes) throws UserException {
+    public void confirmTransferFor(User user, LocalDateTime completeDate, List<CryptoQuote> quotes) throws UserException {
         this.assertUserIsSeller(user);
         this.confirmTransfer(completeDate, quotes);
     }
@@ -64,7 +64,7 @@ public class Transaction {
         throw new UserException(CANNOT_MADE_TRANSFER);
     }
 
-    private void confirmTransfer(LocalDateTime completeDate, List<Crypto> quotes) throws UserException {
+    private void confirmTransfer(LocalDateTime completeDate, List<CryptoQuote> quotes) throws UserException {
         if (this.theSystemPriceIsAboveOfThePriceStatedByTheUser(quotes)) {
             this.status = new CanceledState();
         }else {
@@ -72,7 +72,7 @@ public class Transaction {
         }
     }
 
-    private boolean theSystemPriceIsAboveOfThePriceStatedByTheUser(List<Crypto> quotes) {
+    private boolean theSystemPriceIsAboveOfThePriceStatedByTheUser(List<CryptoQuote> quotes) {
         return intention.thePriceIsNotWithinTheAllowedLimit(quotes);
     }
 
