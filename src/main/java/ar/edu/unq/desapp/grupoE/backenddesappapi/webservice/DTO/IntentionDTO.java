@@ -66,10 +66,4 @@ public class IntentionDTO {
         this.operation = operation;
     }
 
-    /*Criptoactivo
-○ Cantidad nominal del Cripto Activo
-○ Cotización del Cripto Activo
-○ Monto de la operación en pesos ARG
-○ Usuario (Nombre/Apellido)
-○ Operación: [COMPRA|VENTA]*/
 }

@@ -37,7 +37,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private Intention createIntention(String crypto, Integer nominalAmount, Integer cryptoPrice, Integer operationAmount, String operation, User user, List<Crypto> quotes) throws UserException {
+    private Intention createIntention(String crypto, Integer nominalAmount, Integer cryptoPrice, Integer operationAmount, String operation, User user, List<CryptoQuote> quotes) throws UserException {
         if (operation.equals("buy")) {
             return new PurchaseIntention(crypto, nominalAmount, cryptoPrice, operationAmount, user, quotes);
         }else if (operation.equals("sale")) {
@@ -47,8 +47,8 @@ public class UserService {
         }
     }
 
-    public static List<Crypto> updatedQuotes() {
-        Crypto crypto = new Crypto("ALICEUSDT", 120, LocalDateTime.now());
+    public static List<CryptoQuote> updatedQuotes() {
+        CryptoQuote crypto = new CryptoQuote("ALICEUSDT", 120d, LocalDateTime.now());
         return Collections.singletonList(crypto);
     }
 }

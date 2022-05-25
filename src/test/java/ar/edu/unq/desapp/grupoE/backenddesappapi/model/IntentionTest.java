@@ -69,7 +69,7 @@ public class IntentionTest {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         User seller = anUser().build();
         User buyer = anUser().build();
-        List<Crypto> quotes = updatedQuotes();
+        List<CryptoQuote> quotes = updatedQuotes();
         Intention intention = aSaleIntention(seller, quotes, 120);
 
         new Transaction(date, buyer ,seller, intention);
@@ -82,7 +82,7 @@ public class IntentionTest {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
         User seller = anUser().build();
         User buyer = anUser().build();
-        List<Crypto> quotes = updatedQuotes();
+        List<CryptoQuote> quotes = updatedQuotes();
         Intention intention = aSaleIntention(seller, quotes, 120);
         Transaction transaction = new Transaction(date, buyer ,seller, intention);
 
