@@ -51,6 +51,16 @@ public class UserDTO {
     @Pattern(regexp = CONTAINS_ONLY_DIGITS_REGEX, message = THE_WALLET_ADDRESS_SHOULD_HAVE_ONLY_DIGITS)
     private String walletAddress;
 
+    public UserDTO(String firstName, String lastName, String email, String address, String password, String cvu, String walletAddress) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.cvu = cvu;
+        this.walletAddress = walletAddress;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -63,7 +73,7 @@ public class UserDTO {
         return password;
     }
 
-    public void setPassword(String password) throws UserException {
+    public void setPassword(String password) {
         this.password = password;
     }
 

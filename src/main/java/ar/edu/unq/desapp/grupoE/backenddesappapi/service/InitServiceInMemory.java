@@ -2,8 +2,7 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
 
 import javax.annotation.PostConstruct;
 
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +32,8 @@ public class InitServiceInMemory {
 
     private void fireInitialData() throws UserException {
         User user = new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
-        userService.save(user);
         User user2 = new User("Samanta", "Quiroga", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
+        userService.save(user);
         userService.save(user2);
     }
 }

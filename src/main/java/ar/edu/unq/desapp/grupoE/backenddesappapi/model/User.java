@@ -111,4 +111,7 @@ public class User {
         points = points + pointsToAdd;
     }
 
+    public Integer getId() {
+        return id;
+    }
 }

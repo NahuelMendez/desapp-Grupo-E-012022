@@ -35,10 +35,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/api/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) throws UserException {
+    public ResponseEntity<UserRegisterResponse> register(@Valid @RequestBody UserDTO userDTO) throws UserException {
         User user = userDTO.createUser();
-        userService.save(user);
-        return ResponseEntity.ok().body(userDTO);
+        User userResponse = userService.save(user);
+        return ResponseEntity.ok().body(new UserRegisterResponse(userResponse));
     }
 
     @PostMapping(value = "/api/users/{id}/intention", consumes = {MediaType.APPLICATION_JSON_VALUE})
