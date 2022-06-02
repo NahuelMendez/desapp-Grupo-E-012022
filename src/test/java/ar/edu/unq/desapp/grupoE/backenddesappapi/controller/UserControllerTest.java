@@ -1,25 +1,36 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.controller;
 
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.service.CryptoQuoteProvider;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.CryptoQuoteService;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.IntentionDTO;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.UserDTO;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.UserRegisterResponse;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.ResponseBadRequest;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@RunWith(SpringRunner.class)
 public class UserControllerTest {
 
     @LocalServerPort
@@ -28,7 +39,7 @@ public class UserControllerTest {
     @Autowired
     TestRestTemplate restTemplate;
 
-    @Autowired
+    @MockBean
     CryptoQuoteService cryptoQuoteService;
 
     protected String baseURL() {return "http://localhost:" + port;}
@@ -75,9 +86,13 @@ public class UserControllerTest {
 
     @Test
     void userExpressIntentionReturnsStatusOk() {
-        UserDTO userRegisterDTO = anyUser();
         String symbol = "ALICEUSDT";
-        Double price = cryptoQuoteService.getCryptoQuote(symbol).getPrice();
+        Double price = 220d;
+        CryptoQuote cryptoQuote = new CryptoQuote(symbol, price, LocalDateTime.now());
+        Mockito.when(cryptoQuoteService.getCryptoQuote(symbol)).thenReturn(cryptoQuote);
+
+        UserDTO userRegisterDTO = anyUser();
+
         IntentionDTO intention = new IntentionDTO(symbol, 200, price, 5000, "sale");
         UserRegisterResponse user = registerUser(userRegisterDTO).getBody();
         ResponseEntity<IntentionDTO> response = restTemplate.postForEntity(
@@ -85,6 +100,7 @@ public class UserControllerTest {
                 new HttpEntity<IntentionDTO>(intention),
                 IntentionDTO.class);
 
+        Mockito.verify(cryptoQuoteService).getCryptoQuote(symbol);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
