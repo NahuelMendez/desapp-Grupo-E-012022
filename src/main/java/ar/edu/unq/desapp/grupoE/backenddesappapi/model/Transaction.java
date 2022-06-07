@@ -1,17 +1,33 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "transactions")
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Transaction {
 
     public static final String CANNOT_CONFIRM_TRANSFER = "cannot confirm transfer";
     public static final String CANNOT_MADE_TRANSFER = "cannot made transfer";
     public static final String CANNOT_CANCEL_TRANSFER = "cannot cancel transfer";
+    @Id
+    @GeneratedValue
+    private Integer id;
+    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
     private TransactionState status;
+    @Column
     private LocalDateTime date;
+    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
     private User buyer;
+    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
     private User seller;
+    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
     private Intention intention;
+
+    public Transaction(){}
 
     public Transaction(LocalDateTime date, User buyer, User seller, Intention intention){
         intention.disable();
@@ -106,5 +122,9 @@ public class Transaction {
     private void completeTransactionForBoth( Integer points) {
         buyer.completeTransaction(points);
         seller.completeTransaction(points);
+    }
+
+    public Intention getIntention() {
+        return intention;
     }
 }
