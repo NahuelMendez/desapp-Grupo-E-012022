@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.OperationFactory.*;
 import static ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserBuilder.anUser;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,7 +21,7 @@ public class IntentionTest {
         assertEquals("ALICEUSDT", intention.getActiveCrypto());
         assertEquals(200, intention.getNominalAmount());
         assertEquals(120, intention.getCryptoPrice());
-        assertEquals(5000, intention.getOperationAmount());
+        assertEquals(5000, intention.getDollarExchange());
         assertTrue(intention.isActive());
     }
 

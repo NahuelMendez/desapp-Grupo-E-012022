@@ -7,8 +7,8 @@ public class PurchaseIntention extends Intention {
 
     public PurchaseIntention(){super();}
 
-    public PurchaseIntention(String activeCrypto, int nominalAmount, Double cryptoPrice, int operationAmount, User user, CryptoQuote quote) throws UserException {
-        super(activeCrypto, nominalAmount, cryptoPrice, operationAmount, user, quote);
+    public PurchaseIntention(String activeCrypto, int nominalAmount, Double cryptoPrice, Double dollarExchange, User user, CryptoQuote quote) throws UserException {
+        super(activeCrypto, nominalAmount, cryptoPrice, dollarExchange, user, quote);
     }
 
     public Boolean thePriceIsNotWithinTheAllowedLimit(CryptoQuote quote) {

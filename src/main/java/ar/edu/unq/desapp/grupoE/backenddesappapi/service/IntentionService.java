@@ -14,7 +14,7 @@ public class IntentionService {
     @Autowired
     private IntentionRepository intentionRepository;
 
-    public List<Intention> findAll() {
-        return intentionRepository.findAll();
+    public List<Intention> findAllActiveIntentions() {
+        return intentionRepository.findAllActiveIntentions();
     }
 }

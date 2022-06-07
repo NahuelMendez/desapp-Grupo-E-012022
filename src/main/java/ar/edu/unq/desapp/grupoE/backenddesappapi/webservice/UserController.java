@@ -48,14 +48,13 @@ public class UserController {
                 intentionDTO.getCrypto(),
                 intentionDTO.getNominalAmount(),
                 intentionDTO.getCryptoPrice(),
-                intentionDTO.getOperationAmount(),
                 intentionDTO.getOperation());
         return ResponseEntity.ok().body(intentionDTO);
     }
 
     @GetMapping("/api/users/intentions")
     public ResponseEntity<List<IntentionResponse>> allActiveIntention() {
-        List<Intention> list = intentionService.findAll();
+        List<Intention> list = intentionService.findAllActiveIntentions();
         List<IntentionResponse> response = list.stream().map(IntentionResponse::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(response);
     }

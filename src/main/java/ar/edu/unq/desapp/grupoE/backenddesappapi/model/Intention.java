@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "intentions")
@@ -12,13 +12,15 @@ public abstract class Intention {
     @GeneratedValue
     private Integer id;
     @Column
+    private LocalDateTime dateTime;
+    @Column
     private String activeCrypto;
     @Column
     private int nominalAmount;
     @Column
     private Double cryptoPrice;
     @Column
-    private int operationAmount;
+    private Double dollarExchange;
     @ManyToOne(fetch=FetchType.EAGER)
     private User user;
     @Column
@@ -26,12 +28,13 @@ public abstract class Intention {
 
     public Intention(){super();}
 
-    public Intention(String activeCrypto, int nominalAmount, Double cryptoPrice, int operationAmount, User user, CryptoQuote quote) throws UserException {
+    public Intention(String activeCrypto, int nominalAmount, Double cryptoPrice, Double dollarExchange, User user, CryptoQuote quote) throws UserException {
         assertPriceIsOutsideTheVariationMarginOfFivePercent(quote, cryptoPrice);
+        this.dateTime = LocalDateTime.now();
         this.activeCrypto = activeCrypto;
         this.nominalAmount = nominalAmount;
         this.cryptoPrice = cryptoPrice;
-        this.operationAmount = operationAmount;
+        this.dollarExchange = dollarExchange;
         this.user = user;
     }
 
@@ -42,6 +45,8 @@ public abstract class Intention {
     }
 
     public abstract Boolean thePriceIsNotWithinTheAllowedLimit(CryptoQuote quote);
+
+    public LocalDateTime getDateTime() { return dateTime; }
 
     public String getActiveCrypto(){
         return activeCrypto;
@@ -55,9 +60,11 @@ public abstract class Intention {
         return cryptoPrice;
     }
 
-    public int getOperationAmount() {
-        return operationAmount;
+    public Double getDollarExchange() {
+        return dollarExchange;
     }
+
+    public Double operationAmount() { return cryptoPrice * nominalAmount * dollarExchange; }
 
     public User getUser() {
         return user;

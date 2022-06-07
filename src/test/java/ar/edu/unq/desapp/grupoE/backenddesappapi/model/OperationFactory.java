@@ -16,11 +16,11 @@ public class OperationFactory {
     }
 
     public static PurchaseIntention aPurchaseIntention(User user, CryptoQuote quote, Double price) throws UserException {
-        return new PurchaseIntention("ALICEUSDT", 200, price, 5000, user, quote);
+        return new PurchaseIntention("ALICEUSDT", 200, price, 5000d, user, quote);
     }
 
     public static SaleIntention aSaleIntention(User user, CryptoQuote quote, Double price) throws UserException {
-        return new SaleIntention("ALICEUSDT", 200, price, 5000, user, quote);
+        return new SaleIntention("ALICEUSDT", 200, price, 5000d, user, quote);
     }
 
     public static User getUserWithPurchaseIntention() throws UserException {

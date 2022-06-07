@@ -7,8 +7,8 @@ public class SaleIntention extends Intention {
 
     public SaleIntention(){super();}
 
-    public SaleIntention(String activeCrypto, int nominalAmount, Double cryptoPrice, int operationAmount, User user, CryptoQuote quote) throws UserException {
-        super(activeCrypto, nominalAmount, cryptoPrice, operationAmount, user, quote);
+    public SaleIntention(String activeCrypto, int nominalAmount, Double cryptoPrice, Double dollarExchange, User user, CryptoQuote quote) throws UserException {
+        super(activeCrypto, nominalAmount, cryptoPrice, dollarExchange, user, quote);
     }
 
     @Override

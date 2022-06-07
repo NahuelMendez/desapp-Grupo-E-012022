@@ -9,20 +9,17 @@ public class IntentionDTO {
     private String crypto;
     private Integer nominalAmount;
     private Double cryptoPrice;
-    private Integer operationAmount;
     private String operation;
 
     public IntentionDTO(
             String crypto,
             Integer nominalAmount,
             Double cryptoPrice,
-            Integer operationAmount,
             String operation) {
 
         this.crypto = crypto;
         this.nominalAmount = nominalAmount;
         this.cryptoPrice = cryptoPrice;
-        this.operationAmount = operationAmount;
         this.operation = operation;
     }
 
@@ -48,14 +45,6 @@ public class IntentionDTO {
 
     public void setCryptoPrice(Double cryptoPrice) {
         this.cryptoPrice = cryptoPrice;
-    }
-
-    public Integer getOperationAmount() {
-        return operationAmount;
-    }
-
-    public void setOperationAmount(Integer operationAmount) {
-        this.operationAmount = operationAmount;
     }
 
     public String getOperation() {

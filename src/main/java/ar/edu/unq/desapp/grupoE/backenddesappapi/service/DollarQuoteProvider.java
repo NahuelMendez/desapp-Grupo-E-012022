@@ -7,8 +7,8 @@ import java.util.List;
 
 public class DollarQuoteProvider {
 
-        private final String BASE_URL = "https://www.dolarsi.com/api/api.php?type=valoresprincipales";
-        private WebClient webClient;
+        private static final String BASE_URL = "https://www.dolarsi.com/api/api.php?type=valoresprincipales";
+        private final WebClient webClient;
 
 
         public DollarQuoteProvider(){
@@ -24,8 +24,5 @@ public class DollarQuoteProvider {
 
             return Double.valueOf(response.get(0).getCasa().getCompra().replace(",", "."));
         }
-
-
-
 
 }
