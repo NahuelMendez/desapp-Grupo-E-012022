@@ -85,4 +85,8 @@ public abstract class Intention {
     public void activate() {
         this.active = true;
     }
+
+    public Integer getId() {
+        return id;
+    }
 }

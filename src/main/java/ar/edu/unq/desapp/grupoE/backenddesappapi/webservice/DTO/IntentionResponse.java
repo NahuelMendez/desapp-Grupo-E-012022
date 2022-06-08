@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class IntentionResponse {
 
+    private final Integer id;
     private final LocalDateTime dateTime;
     private final String crypto;
     private final Integer nominalAmount;
@@ -15,6 +16,7 @@ public class IntentionResponse {
     private final String intentionType;
 
     public IntentionResponse(Intention intention) {
+        this.id = intention.getId();
         this.dateTime = intention.getDateTime();
         this.intentionType = intention.intentionType();
         this.crypto = intention.getActiveCrypto();
@@ -22,6 +24,10 @@ public class IntentionResponse {
         this.cryptoPrice = intention.getCryptoPrice();
         this.operationAmount = intention.operationAmount();
         this.user = new SimpleUser(intention.getUser());
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public LocalDateTime getDateTime() { return dateTime; }
@@ -49,5 +55,4 @@ public class IntentionResponse {
     public SimpleUser getUser() {
         return user;
     }
-
 }

@@ -42,14 +42,14 @@ public class UserController {
     }
 
     @PostMapping(value = "/api/users/{id}/intention", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<IntentionDTO> expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
-        userService.expressIntention(
+    public ResponseEntity<IntentionResponse> expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
+        Intention intention = userService.expressIntention(
                 id,
                 intentionDTO.getCrypto(),
                 intentionDTO.getNominalAmount(),
                 intentionDTO.getCryptoPrice(),
                 intentionDTO.getOperation());
-        return ResponseEntity.ok().body(intentionDTO);
+        return ResponseEntity.ok().body(new IntentionResponse(intention));
     }
 
     @GetMapping("/api/users/intentions")

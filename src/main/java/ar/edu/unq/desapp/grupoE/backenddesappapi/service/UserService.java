@@ -31,13 +31,14 @@ public class UserService {
     }
 
     @Transactional
-    public void expressIntention(Integer id, String crypto, Integer nominalAmount, Double cryptoPrice, String operation) throws UserException {
+    public Intention expressIntention(Integer id, String crypto, Integer nominalAmount, Double cryptoPrice, String operation) throws UserException {
         User user = userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
         Double dollarExchange = dollarQuoteService.getDollarQuote();
         Intention intention = createIntention(crypto, nominalAmount, cryptoPrice, dollarExchange, operation, user, getCryptoQuote(crypto));
         user.expressIntention(intention);
-        intentionRepository.save(intention);
+        Intention intentionResponse = intentionRepository.save(intention);
         userRepository.save(user);
+        return intentionResponse;
     }
 
     private Intention createIntention(String crypto, Integer nominalAmount, Double cryptoPrice, Double dollarExchange, String operation, User user, CryptoQuote quote) throws UserException {
