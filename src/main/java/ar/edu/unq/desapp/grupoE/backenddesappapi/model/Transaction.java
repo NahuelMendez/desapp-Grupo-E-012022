@@ -16,15 +16,15 @@ public class Transaction {
     @Id
     @GeneratedValue
     private Integer id;
-    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
+    @OneToOne(cascade=CascadeType.ALL)
     private TransactionState status;
     @Column
     private LocalDateTime date;
-    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
+    @OneToOne(cascade=CascadeType.ALL)
     private User buyer;
-    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
+    @OneToOne(cascade=CascadeType.ALL)
     private User seller;
-    @OneToOne(targetEntity=Intention.class, fetch=FetchType.EAGER)
+    @OneToOne(cascade=CascadeType.ALL)
     private Intention intention;
 
     public Transaction(){}

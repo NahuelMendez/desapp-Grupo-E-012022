@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
+@Entity
 public class CanceledState extends TransactionState {
 
     @Override
