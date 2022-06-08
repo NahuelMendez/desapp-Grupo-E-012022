@@ -101,8 +101,8 @@ public class TransactionTest {
     @Test
     public void whenAPurchaseOperationIsCompleteButTheSystemPriceIsAboveOfThePriceStatedByTheUser() throws UserException {
         LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
-        Intention sale = aPurchaseIntention(seller, quoteWithCryptoPrice(120d), 120d);
-        seller.expressIntention(sale);
+        Intention sale = aPurchaseIntention(buyer, quoteWithCryptoPrice(120d), 120d);
+        buyer.expressIntention(sale);
 
         Transaction transaction = new Transaction(date, buyer, seller, sale);
 
@@ -177,7 +177,33 @@ public class TransactionTest {
             transaction.cancelOperation(otherUser);
         });
 
-        assertEquals(Transaction.CANNOT_CANCEL_TRANSFER, thrown.getMessage());
+        assertEquals(Transaction.CANNOT_CANCEL_TRANSACTION, thrown.getMessage());
+    }
+
+    @Test
+    public void APurchaseTransactionMustBeGeneratedFromSaleIntention() throws UserException {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        Intention sale = aPurchaseIntention(buyer, quoteWithCryptoPrice(120d), 120d);
+        buyer.expressIntention(sale);
+
+        UserException thrown = assertThrows(UserException.class, () -> {
+            new Transaction(date, seller, buyer, sale);
+        });
+
+        assertEquals(Transaction.CANNOT_INIT_TRANSACTION, thrown.getMessage());
+    }
+
+    @Test
+    public void ASaleTransactionMustBeGeneratedFromPurchaseIntention() throws UserException {
+        LocalDateTime date = LocalDateTime.of(2022, 4, 16, 21, 10);
+        Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
+        seller.expressIntention(sale);
+
+        UserException thrown = assertThrows(UserException.class, () -> {
+            new Transaction(date, seller, buyer, sale);
+        });
+
+        assertEquals(Transaction.CANNOT_INIT_TRANSACTION, thrown.getMessage());
     }
 
     private void doTransactionWithin30Minutes( User buyer, User seller) throws UserException {

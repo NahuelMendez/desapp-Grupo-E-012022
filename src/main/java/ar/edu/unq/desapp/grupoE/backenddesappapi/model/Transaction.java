@@ -12,7 +12,8 @@ public class Transaction {
 
     public static final String CANNOT_CONFIRM_TRANSFER = "cannot confirm transfer";
     public static final String CANNOT_MADE_TRANSFER = "cannot made transfer";
-    public static final String CANNOT_CANCEL_TRANSFER = "cannot cancel transfer";
+    public static final String CANNOT_CANCEL_TRANSACTION = "cannot cancel transaction";
+    public static final String CANNOT_INIT_TRANSACTION = "cannot init transaction";
     @Id
     @GeneratedValue
     private Integer id;
@@ -29,7 +30,8 @@ public class Transaction {
 
     public Transaction(){}
 
-    public Transaction(LocalDateTime date, User buyer, User seller, Intention intention){
+    public Transaction(LocalDateTime date, User buyer, User seller, Intention intention) throws UserException {
+        intention.validateOperation(buyer, seller);
         intention.disable();
         this.date = date;
         this.buyer = buyer;
@@ -107,7 +109,7 @@ public class Transaction {
 
     private void assertUserIsParticipant(User user) throws UserException {
         if (isNotBuyer(user) && isNotSeller(user)) {
-            throw new UserException(CANNOT_CANCEL_TRANSFER);
+            throw new UserException(CANNOT_CANCEL_TRANSACTION);
         }
     }
 

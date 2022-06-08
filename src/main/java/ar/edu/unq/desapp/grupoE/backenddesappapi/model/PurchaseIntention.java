@@ -24,4 +24,11 @@ public class PurchaseIntention extends Intention {
     public String intentionType() {
         return "buy";
     }
+
+    @Override
+    public void validateOperation(User buyer, User seller) throws UserException {
+        if (!isOwner(buyer)){
+            throw new UserException("cannot init transaction");
+        }
+    }
 }

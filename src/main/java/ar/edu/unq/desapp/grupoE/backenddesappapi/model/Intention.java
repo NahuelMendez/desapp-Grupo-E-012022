@@ -89,4 +89,10 @@ public abstract class Intention {
     public Integer getId() {
         return id;
     }
+
+    public abstract void validateOperation(User buyer, User seller) throws UserException;
+
+    protected boolean isOwner(User user) {
+        return getUser().equals(user);
+    }
 }
