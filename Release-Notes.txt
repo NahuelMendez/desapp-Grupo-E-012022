@@ -35,3 +35,23 @@ NOTES:
 
 KNOWN ISSUES:
 * La informacion que se obtiene al pedir todos los usuarios no es la correcta.
+
+RELEASE NOTES
+
+---------------------------------------------------------------------
+TAG ENTREGA1 2.0 -> https://github.com/NahuelMendez/desapp-Grupo-E-012022/releases/tag/Entrega2_v2.0
+---------------------------------------------------------------------
+
+NEW FEATURES:
+
+* Funcionalidades:
+    - Listar cotizacion de criptoactivos.
+    - Permitir que un usuario exprese su intencion de compra/venta.
+    - Procesar la transaccion informada por un usuario.
+        * Iniciar transaccion
+    - Listado de usuarios de la plataforma
+
+NOTES:
+* Falta las acciones restantes en una transaccion (Confirmar transaccion, confirmar recepcion, cancelar).
+* Falta informar al usuario el volumen operado de cripto activos entre dos fechas
+
