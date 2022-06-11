@@ -41,7 +41,7 @@ public class UserController {
         return ResponseEntity.ok().body(new UserRegisterResponse(userResponse));
     }
 
-    @PostMapping(value = "/api/users/{id}/intention", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/api/users/{id}/intentions", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<IntentionResponse> expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
         Intention intention = userService.expressIntention(
                 id,
@@ -52,7 +52,7 @@ public class UserController {
         return ResponseEntity.ok().body(new IntentionResponse(intention));
     }
 
-    @GetMapping("/api/users/intentions")
+    @GetMapping("/api/intentions")
     public ResponseEntity<List<IntentionResponse>> allActiveIntention() {
         List<Intention> list = intentionService.findAllActiveIntentions();
         List<IntentionResponse> response = list.stream().map(IntentionResponse::new).collect(Collectors.toList());
