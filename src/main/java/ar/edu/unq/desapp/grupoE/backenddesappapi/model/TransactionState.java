@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions_state")
+@Table
 abstract public class TransactionState {
 
     @Id

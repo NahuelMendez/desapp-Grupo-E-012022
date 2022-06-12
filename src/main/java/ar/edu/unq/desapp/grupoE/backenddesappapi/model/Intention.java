@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "intentions")
+@Table
 public abstract class Intention {
 
     public static final String CANNOT_CREATE_INTENTION = "Cannot create intention";

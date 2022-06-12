@@ -52,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok().body(new IntentionResponse(intention));
     }
 
+    @GetMapping("/api/users/{id}/traded-volume")
+    public ResponseEntity<Integer> tradedVolume(@PathVariable("id") Integer id) {
+        Integer volume = userService.tradedVolumeOfCryptoAssets(id);
+        return ResponseEntity.ok().body(volume);
+    }
+
     @GetMapping("/api/intentions")
     public ResponseEntity<List<IntentionResponse>> allActiveIntention() {
         List<Intention> list = intentionService.findAllActiveIntentions();

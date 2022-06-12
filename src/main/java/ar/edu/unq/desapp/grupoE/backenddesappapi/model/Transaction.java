@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
+@Table
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Transaction {
 
@@ -59,7 +59,7 @@ public class Transaction {
     }
 
     public void madeTransfer() {
-        this.status = new TransferStatus();
+        this.status = new TransferState();
     }
 
     public void confirmTransferFor(User user, LocalDateTime completeDate, CryptoQuote quote) throws UserException {
@@ -68,6 +68,7 @@ public class Transaction {
     }
 
     public void completeTransaction(LocalDateTime completeDate) {
+        this.status = new CompleteTransactionState();
         if (this.isWithin30Minutes(completeDate)) {
             completeTransactionForBoth( 10);
         } else {

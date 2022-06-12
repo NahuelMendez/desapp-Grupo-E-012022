@@ -54,4 +54,8 @@ public class UserService {
     private CryptoQuote getCryptoQuote(String symbol) {
         return this.cryptoQuoteService.getCryptoQuote(symbol);
     }
+
+    public Integer tradedVolumeOfCryptoAssets(Integer id) {
+        return userRepository.readId(id);
+    }
 }
