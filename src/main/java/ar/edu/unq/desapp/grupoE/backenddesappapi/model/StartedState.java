@@ -15,4 +15,9 @@ public class StartedState extends TransactionState {
     public void successfulTransfer(Transaction transaction) {
         transaction.madeTransfer();
     }
+
+    @Override
+    public void cancelOperation(User user, Transaction transaction) throws UserException {
+        transaction.confirmCancelOperation(user);
+    }
 }

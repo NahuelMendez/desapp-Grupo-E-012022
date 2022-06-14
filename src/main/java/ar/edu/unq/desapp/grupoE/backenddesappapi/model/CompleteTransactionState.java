@@ -15,4 +15,9 @@ public class CompleteTransactionState extends TransactionState {
     public void successfulTransfer(Transaction transaction) throws UserException {
         transaction.throwMadeTransferException();
     }
+
+    @Override
+    public void cancelOperation(User user, Transaction transaction) throws UserException {
+        transaction.throwCancelOperation();
+    }
 }

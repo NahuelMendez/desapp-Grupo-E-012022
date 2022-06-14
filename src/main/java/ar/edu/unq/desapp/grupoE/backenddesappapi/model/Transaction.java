@@ -41,6 +41,10 @@ public class Transaction {
     }
 
     public void cancelOperation(User user) throws UserException {
+        status.cancelOperation(user, this);
+    }
+
+    public void confirmCancelOperation(User user) throws UserException {
         this.assertUserIsParticipant(user);
         user.subtractReputationPoints();
         intention.activate();
@@ -129,5 +133,9 @@ public class Transaction {
 
     public Intention getIntention() {
         return intention;
+    }
+
+    public void throwCancelOperation() throws UserException {
+        throw new UserException(CANNOT_CANCEL_TRANSACTION);
     }
 }
