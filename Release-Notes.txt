@@ -47,11 +47,10 @@ NEW FEATURES:
 * Funcionalidades:
     - Listar cotizacion de criptoactivos.
     - Permitir que un usuario exprese su intencion de compra/venta.
+    - Listado de intenciones activas de compra/venta
     - Procesar la transaccion informada por un usuario.
-        * Iniciar transaccion
     - Listado de usuarios de la plataforma
+    - Informar al usuario el volumen operado de cripto activos entre dos fechas
 
-NOTES:
-* Falta las acciones restantes en una transaccion (Confirmar transaccion, confirmar recepcion, cancelar).
-* Falta informar al usuario el volumen operado de cripto activos entre dos fechas
+
 
