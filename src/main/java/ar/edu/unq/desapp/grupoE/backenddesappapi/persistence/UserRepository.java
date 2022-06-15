@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 @Repository
@@ -19,6 +19,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
             "FROM Transaction transaction, CompleteTransactionState state " +
             "JOIN transaction.intention intention " +
             "JOIN intention.user user " +
-            "WHERE user.id = ?1")
-    Integer readId(Integer id);
+            "WHERE user.id = ?1 and transaction.date BETWEEN ?2 and ?3")
+    Integer getTradedVolumeOfCryptoAssets(Integer id, LocalDateTime startDate, LocalDateTime finalDate);
 }
