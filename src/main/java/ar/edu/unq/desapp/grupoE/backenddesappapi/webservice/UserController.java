@@ -8,12 +8,16 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.service.UserService;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +45,7 @@ public class UserController {
         return ResponseEntity.ok().body(new UserRegisterResponse(userResponse));
     }
 
-    @PostMapping(value = "/api/users/{id}/intention", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/api/users/{id}/intentions", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<IntentionResponse> expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
         Intention intention = userService.expressIntention(
                 id,
@@ -52,7 +56,21 @@ public class UserController {
         return ResponseEntity.ok().body(new IntentionResponse(intention));
     }
 
-    @GetMapping("/api/users/intentions")
+    @GetMapping("/api/users/{id}/traded-volume")
+    public ResponseEntity<Integer> tradedVolume(
+            @PathVariable("id") Integer id,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("finalDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finalDate
+            ) {
+        Integer volume = userService.tradedVolumeOfCryptoAssets(
+                id,
+                LocalDateTime.of(startDate, LocalTime.of(00,00,00)),
+                LocalDateTime.of(finalDate, LocalTime.of(00,00,00))
+        );
+        return ResponseEntity.ok().body(volume);
+    }
+
+    @GetMapping("/api/intentions")
     public ResponseEntity<List<IntentionResponse>> allActiveIntention() {
         List<Intention> list = intentionService.findAllActiveIntentions();
         List<IntentionResponse> response = list.stream().map(IntentionResponse::new).collect(Collectors.toList());

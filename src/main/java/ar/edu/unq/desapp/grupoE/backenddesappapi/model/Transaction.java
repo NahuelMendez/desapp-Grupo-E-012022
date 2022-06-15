@@ -6,13 +6,14 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
+@Table
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Transaction {
 
     public static final String CANNOT_CONFIRM_TRANSFER = "cannot confirm transfer";
     public static final String CANNOT_MADE_TRANSFER = "cannot made transfer";
-    public static final String CANNOT_CANCEL_TRANSFER = "cannot cancel transfer";
+    public static final String CANNOT_CANCEL_TRANSACTION = "cannot cancel transaction";
+    public static final String CANNOT_INIT_TRANSACTION = "cannot init transaction";
     @Id
     @GeneratedValue
     private Integer id;
@@ -29,7 +30,8 @@ public class Transaction {
 
     public Transaction(){}
 
-    public Transaction(LocalDateTime date, User buyer, User seller, Intention intention){
+    public Transaction(LocalDateTime date, User buyer, User seller, Intention intention) throws UserException {
+        intention.validateOperation(buyer, seller);
         intention.disable();
         this.date = date;
         this.buyer = buyer;
@@ -39,6 +41,10 @@ public class Transaction {
     }
 
     public void cancelOperation(User user) throws UserException {
+        status.cancelOperation(user, this);
+    }
+
+    public void confirmCancelOperation(User user) throws UserException {
         this.assertUserIsParticipant(user);
         user.subtractReputationPoints();
         intention.activate();
@@ -57,7 +63,7 @@ public class Transaction {
     }
 
     public void madeTransfer() {
-        this.status = new TransferStatus();
+        this.status = new TransferState();
     }
 
     public void confirmTransferFor(User user, LocalDateTime completeDate, CryptoQuote quote) throws UserException {
@@ -66,6 +72,7 @@ public class Transaction {
     }
 
     public void completeTransaction(LocalDateTime completeDate) {
+        this.status = new CompleteTransactionState();
         if (this.isWithin30Minutes(completeDate)) {
             completeTransactionForBoth( 10);
         } else {
@@ -107,7 +114,7 @@ public class Transaction {
 
     private void assertUserIsParticipant(User user) throws UserException {
         if (isNotBuyer(user) && isNotSeller(user)) {
-            throw new UserException(CANNOT_CANCEL_TRANSFER);
+            throw new UserException(CANNOT_CANCEL_TRANSACTION);
         }
     }
 
@@ -126,5 +133,9 @@ public class Transaction {
 
     public Intention getIntention() {
         return intention;
+    }
+
+    public void throwCancelOperation() throws UserException {
+        throw new UserException(CANNOT_CANCEL_TRANSACTION);
     }
 }

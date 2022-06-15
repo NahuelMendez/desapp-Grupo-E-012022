@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Entity
-public class StartedState extends TransactionState {
+public class CompleteTransactionState extends TransactionState {
 
     @Override
     public void confirmedTransfer(Transaction transaction, LocalDateTime completeDate) throws UserException {
@@ -12,12 +12,12 @@ public class StartedState extends TransactionState {
     }
 
     @Override
-    public void successfulTransfer(Transaction transaction) {
-        transaction.madeTransfer();
+    public void successfulTransfer(Transaction transaction) throws UserException {
+        transaction.throwMadeTransferException();
     }
 
     @Override
     public void cancelOperation(User user, Transaction transaction) throws UserException {
-        transaction.confirmCancelOperation(user);
+        transaction.throwCancelOperation();
     }
 }

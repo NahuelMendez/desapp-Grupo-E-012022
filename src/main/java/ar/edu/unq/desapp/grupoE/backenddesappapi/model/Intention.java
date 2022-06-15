@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "intentions")
+@Table
 public abstract class Intention {
 
     public static final String CANNOT_CREATE_INTENTION = "Cannot create intention";
@@ -88,5 +88,11 @@ public abstract class Intention {
 
     public Integer getId() {
         return id;
+    }
+
+    public abstract void validateOperation(User buyer, User seller) throws UserException;
+
+    protected boolean isOwner(User user) {
+        return getUser().equals(user);
     }
 }

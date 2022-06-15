@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,7 +21,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping(value = "/api/transaction/{intentionId}/user/{userId}/purchase")
+    @PostMapping(value = "/api/transactions/{intentionId}/users/{userId}/purchases")
     public ResponseEntity<TransactionDTO> createPurchaseTransaction(
             @PathVariable("intentionId") Integer intentionId,
             @PathVariable("userId") Integer userId) throws UserException {
@@ -28,9 +29,9 @@ public class TransactionController {
         Transaction transaction = transactionService.createPurchaseTransaction(intentionId, userId);
 
         return ResponseEntity.ok().body(new TransactionDTO(transaction));
-    };
+    }
 
-    @PostMapping(value = "/api/transaction/{intentionId}/user/{userId}/sale")
+    @PostMapping(value = "/api/transactions/{intentionId}/users/{userId}/sales")
     public ResponseEntity<TransactionDTO> createSaleTransaction(
             @PathVariable("intentionId") Integer intentionId,
             @PathVariable("userId") Integer userId) throws UserException {
@@ -38,7 +39,29 @@ public class TransactionController {
         Transaction transaction = transactionService.createSaleTransaction(intentionId, userId);
 
         return ResponseEntity.ok().body(new TransactionDTO(transaction));
-    };
+    }
 
+    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/paid}")
+    public ResponseEntity<String> markAsPaid(
+            @PathVariable("transactionId") Integer transactionId,
+            @PathVariable("userId") Integer userId) throws UserException {
+        transactionService.markAsPaid(transactionId, userId);
+        return ResponseEntity.ok().body("successful action");
+    }
 
+    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/cancel}")
+    public ResponseEntity<String> cancel(
+            @PathVariable("transactionId") Integer transactionId,
+            @PathVariable("userId") Integer userId) throws UserException {
+        transactionService.cancel(transactionId, userId);
+        return ResponseEntity.ok().body("successful action");
+    }
+
+    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/confirmed}")
+    public ResponseEntity<String> markAsPaymentConfirmed(
+            @PathVariable("transactionId") Integer transactionId,
+            @PathVariable("userId") Integer userId) throws UserException {
+        transactionService.markAsPaymentConfirmed(transactionId, userId);
+        return ResponseEntity.ok().body("successful action");
+    }
 }

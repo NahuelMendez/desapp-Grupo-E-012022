@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions_state")
+@Table
 abstract public class TransactionState {
 
     @Id
@@ -17,4 +17,6 @@ abstract public class TransactionState {
     public abstract void confirmedTransfer(Transaction transaction, LocalDateTime completeDate) throws UserException;
 
     public abstract void successfulTransfer(Transaction transaction) throws UserException;
+
+    public abstract void cancelOperation(User user, Transaction transaction) throws UserException;
 }

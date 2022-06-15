@@ -96,7 +96,7 @@ public class UserControllerTest {
         IntentionDTO intention = new IntentionDTO(symbol, 200, price, "sale");
         UserRegisterResponse user = registerUser(userRegisterDTO).getBody();
         ResponseEntity<IntentionDTO> response = restTemplate.postForEntity(
-                urlUsers() + "/" + user.getId().toString() + "/intention",
+                urlUsers() + "/" + user.getId().toString() + "/intentions",
                 new HttpEntity<IntentionDTO>(intention),
                 IntentionDTO.class);
 

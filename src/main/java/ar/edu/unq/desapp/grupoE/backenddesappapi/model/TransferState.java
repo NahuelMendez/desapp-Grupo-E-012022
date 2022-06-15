@@ -3,8 +3,7 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
-@Entity
-public class TransferStatus extends TransactionState {
+public class TransferState extends TransactionState {
 
     @Override
     public void confirmedTransfer(Transaction transaction, LocalDateTime completeDate) {
@@ -14,5 +13,10 @@ public class TransferStatus extends TransactionState {
     @Override
     public void successfulTransfer(Transaction transaction) throws UserException {
         transaction.throwMadeTransferException();
+    }
+
+    @Override
+    public void cancelOperation(User user, Transaction transaction) throws UserException {
+        transaction.confirmCancelOperation(user);
     }
 }
