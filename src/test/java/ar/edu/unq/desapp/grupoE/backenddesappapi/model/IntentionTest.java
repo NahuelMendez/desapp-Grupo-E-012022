@@ -68,7 +68,7 @@ public class IntentionTest {
         User buyer = anUser().build();
         Intention intention = aSaleIntention(seller, updatedQuote(), 120d);
 
-        new Transaction(date, buyer ,seller, intention);
+        new Transaction(date, buyer , intention);
 
         assertFalse(intention.isActive());
     }
@@ -79,7 +79,7 @@ public class IntentionTest {
         User seller = anUser().build();
         User buyer = anUser().build();
         Intention intention = aSaleIntention(seller, updatedQuote(), 120d);
-        Transaction transaction = new Transaction(date, buyer ,seller, intention);
+        Transaction transaction = new Transaction(date, buyer , intention);
 
         transaction.cancelOperation(seller);
 

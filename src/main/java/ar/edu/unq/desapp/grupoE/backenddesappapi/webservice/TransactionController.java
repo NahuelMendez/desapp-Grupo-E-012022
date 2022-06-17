@@ -21,22 +21,12 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping(value = "/api/transactions/{intentionId}/users/{userId}/purchases")
-    public ResponseEntity<TransactionDTO> createPurchaseTransaction(
+    @PostMapping(value = "/api/transactions/{intentionId}/users/{userId}")
+    public ResponseEntity<TransactionDTO> createTransaction(
             @PathVariable("intentionId") Integer intentionId,
             @PathVariable("userId") Integer userId) throws UserException {
 
-        Transaction transaction = transactionService.createPurchaseTransaction(intentionId, userId);
-
-        return ResponseEntity.ok().body(new TransactionDTO(transaction));
-    }
-
-    @PostMapping(value = "/api/transactions/{intentionId}/users/{userId}/sales")
-    public ResponseEntity<TransactionDTO> createSaleTransaction(
-            @PathVariable("intentionId") Integer intentionId,
-            @PathVariable("userId") Integer userId) throws UserException {
-
-        Transaction transaction = transactionService.createSaleTransaction(intentionId, userId);
+        Transaction transaction = transactionService.createTransaction(intentionId, userId);
 
         return ResponseEntity.ok().body(new TransactionDTO(transaction));
     }

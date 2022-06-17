@@ -90,7 +90,7 @@ public abstract class Intention {
         return id;
     }
 
-    public abstract void validateOperation(User buyer, User seller) throws UserException;
+    public abstract void validateOperation(User buyer) throws UserException;
 
     protected boolean isOwner(User user) {
         return getUser().equals(user);

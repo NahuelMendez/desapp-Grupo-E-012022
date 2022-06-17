@@ -26,8 +26,8 @@ public class PurchaseIntention extends Intention {
     }
 
     @Override
-    public void validateOperation(User buyer, User seller) throws UserException {
-        if (!isOwner(buyer)){
+    public void validateOperation(User buyer) throws UserException {
+        if (isOwner(buyer)){
             throw new UserException("cannot init transaction");
         }
     }

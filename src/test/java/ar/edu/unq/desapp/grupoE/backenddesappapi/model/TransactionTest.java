@@ -47,7 +47,7 @@ public class TransactionTest {
         SaleIntention sale = aSaleIntention(seller, updatedQuote(), 125d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer ,seller, sale);
+        Transaction transaction = new Transaction(date, buyer , sale);
 
         transaction.cancelOperation(buyer);
 
@@ -72,7 +72,7 @@ public class TransactionTest {
         SaleIntention sale = aSaleIntention(seller, updatedQuote(), 120d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         UserException thrown = assertThrows(UserException.class,  () -> {
             transaction.confirmTransferFor(seller, date, updatedQuote());
@@ -87,7 +87,7 @@ public class TransactionTest {
         SaleIntention sale = aSaleIntention(seller, updatedQuote(), 122d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         transaction.cancelOperation(buyer);
 
@@ -104,10 +104,10 @@ public class TransactionTest {
         Intention sale = aPurchaseIntention(buyer, quoteWithCryptoPrice(120d), 120d);
         buyer.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, seller, sale);
 
-        transaction.doTransfer(buyer);
-        transaction.confirmTransferFor(seller, date, quoteWithCryptoPrice(140d));
+        transaction.doTransfer(seller);
+        transaction.confirmTransferFor(buyer, date, quoteWithCryptoPrice(140d));
 
         assertEquals(0, buyer.getReputation());
         assertEquals(0, seller.getReputation());
@@ -121,7 +121,7 @@ public class TransactionTest {
         Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         transaction.doTransfer(buyer);
         transaction.confirmTransferFor(seller, date, quoteWithCryptoPrice(100d));
@@ -138,7 +138,7 @@ public class TransactionTest {
         Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         UserException thrown = assertThrows(UserException.class, () -> {
             transaction.doTransfer(seller);
@@ -153,7 +153,7 @@ public class TransactionTest {
         Intention sale = aSaleIntention(seller, quoteWithCryptoPrice(120d), 120d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         transaction.doTransfer(buyer);
 
@@ -171,7 +171,7 @@ public class TransactionTest {
         seller.expressIntention(sale);
         User otherUser = anUser().build();
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         UserException thrown = assertThrows(UserException.class, () -> {
             transaction.cancelOperation(otherUser);
@@ -187,7 +187,7 @@ public class TransactionTest {
         buyer.expressIntention(sale);
 
         UserException thrown = assertThrows(UserException.class, () -> {
-            new Transaction(date, seller, buyer, sale);
+            new Transaction(date, buyer, sale);
         });
 
         assertEquals(Transaction.CANNOT_INIT_TRANSACTION, thrown.getMessage());
@@ -200,7 +200,7 @@ public class TransactionTest {
         seller.expressIntention(sale);
 
         UserException thrown = assertThrows(UserException.class, () -> {
-            new Transaction(date, seller, buyer, sale);
+            new Transaction(date, seller, sale);
         });
 
         assertEquals(Transaction.CANNOT_INIT_TRANSACTION, thrown.getMessage());
@@ -211,7 +211,7 @@ public class TransactionTest {
         SaleIntention sale = aSaleIntention(seller, updatedQuote(), 120d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         transaction.doTransfer(buyer);
         transaction.confirmTransferFor(seller, date, updatedQuote());
@@ -223,7 +223,7 @@ public class TransactionTest {
         SaleIntention sale = aSaleIntention(seller, updatedQuote(), 120d);
         seller.expressIntention(sale);
 
-        Transaction transaction = new Transaction(date, buyer, seller, sale);
+        Transaction transaction = new Transaction(date, buyer, sale);
 
         transaction.doTransfer(buyer);
         transaction.confirmTransferFor(seller, postDate, updatedQuote());

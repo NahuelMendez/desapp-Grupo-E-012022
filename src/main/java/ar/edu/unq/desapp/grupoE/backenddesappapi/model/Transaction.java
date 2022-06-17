@@ -24,18 +24,15 @@ public class Transaction {
     @OneToOne(cascade=CascadeType.ALL)
     private User buyer;
     @OneToOne(cascade=CascadeType.ALL)
-    private User seller;
-    @OneToOne(cascade=CascadeType.ALL)
     private Intention intention;
 
     public Transaction(){}
 
-    public Transaction(LocalDateTime date, User buyer, User seller, Intention intention) throws UserException {
-        intention.validateOperation(buyer, seller);
+    public Transaction(LocalDateTime date, User buyer, Intention intention) throws UserException {
+        intention.validateOperation(buyer);
         intention.disable();
         this.date = date;
         this.buyer = buyer;
-        this.seller = seller;
         this.intention = intention;
         this.status = new StartedState();
     }
@@ -67,7 +64,7 @@ public class Transaction {
     }
 
     public void confirmTransferFor(User user, LocalDateTime completeDate, CryptoQuote quote) throws UserException {
-        this.assertUserIsSeller(user);
+        this.assertUserIsIntentionOwner(user);
         this.confirmTransfer(completeDate, quote);
     }
 
@@ -106,20 +103,20 @@ public class Transaction {
         }
     }
 
-    private void assertUserIsSeller(User user) throws UserException {
-        if (isNotSeller(user)) {
+    private void assertUserIsIntentionOwner(User user) throws UserException {
+        if (isNotOwnerIntention(user)) {
             this.throwConfirmTransferException();
         }
     }
 
-    private void assertUserIsParticipant(User user) throws UserException {
-        if (isNotBuyer(user) && isNotSeller(user)) {
-            throw new UserException(CANNOT_CANCEL_TRANSACTION);
-        }
+    private boolean isNotOwnerIntention(User user) {
+        return !intention.isOwner(user);
     }
 
-    private boolean isNotSeller(User user) {
-        return seller != user;
+    private void assertUserIsParticipant(User user) throws UserException {
+        if (isNotBuyer(user) && isNotOwnerIntention(user)) {
+            throw new UserException(CANNOT_CANCEL_TRANSACTION);
+        }
     }
 
     private boolean isNotBuyer(User user) {
@@ -128,7 +125,7 @@ public class Transaction {
 
     private void completeTransactionForBoth( Integer points) {
         buyer.completeTransaction(points);
-        seller.completeTransaction(points);
+        intention.getUser().completeTransaction(points);
     }
 
     public Intention getIntention() {

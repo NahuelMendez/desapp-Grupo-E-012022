@@ -26,18 +26,10 @@ public class TransactionService {
     @Autowired
     private CryptoQuoteService cryptoQuoteService;
 
-    public Transaction createPurchaseTransaction(Integer intentionId, Integer userId) throws UserException {
+    public Transaction createTransaction(Integer intentionId, Integer userId) throws UserException {
         Intention intention = findIntention(intentionId);
         User buyer = findUser(userId);
-        Transaction transaction = new Transaction(LocalDateTime.now(), buyer, intention.getUser(), intention);
-        transactionRepository.save(transaction);
-        return transaction;
-    }
-
-    public Transaction createSaleTransaction(Integer intentionId, Integer userId) throws UserException {
-        Intention intention = findIntention(intentionId);
-        User seller = findUser(userId);
-        Transaction transaction = new Transaction(LocalDateTime.now(), intention.getUser(), seller, intention);
+        Transaction transaction = new Transaction(LocalDateTime.now(), buyer, intention);
         transactionRepository.save(transaction);
         return transaction;
     }
