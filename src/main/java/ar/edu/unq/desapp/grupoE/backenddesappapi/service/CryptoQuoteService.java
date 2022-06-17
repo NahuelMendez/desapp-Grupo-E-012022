@@ -8,16 +8,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class CryptoQuoteService {
 
     private final CryptoQuoteProvider cryptoQuoteProvider = new CryptoQuoteProvider();
 
-    @Transactional
     public CryptoQuote getCryptoQuote(String symbol){
         return this.cryptoQuoteProvider.getCryptoQuoteBySymbol(symbol);
     }
 
-    @Transactional
     public List<CryptoQuote> getAllCryptoQuotes(){
         return this.cryptoQuoteProvider.getAllCryptoQuotes();
     }

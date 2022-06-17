@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
+@Transactional
 public class DollarQuoteService {
 
     private final DollarQuoteProvider dollarQuoteProvider = new DollarQuoteProvider();
 
-    @Transactional
     public Double getDollarQuote(){
         return this.dollarQuoteProvider.getDollarQuote();
     }

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -22,7 +23,6 @@ public class UserService {
     @Autowired
     private DollarQuoteService dollarQuoteService;
 
-    @Transactional
     public User save(User user) {
         return userRepository.save(user);
     }
@@ -31,7 +31,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @Transactional
     public Intention expressIntention(Integer id, String crypto, Integer nominalAmount, Double cryptoPrice, String operation) throws UserException {
         User user = userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
         Double dollarExchange = dollarQuoteService.getDollarQuote();
@@ -48,7 +47,7 @@ public class UserService {
         }else if (operation.equals("sale")) {
             return new SaleIntention(crypto, nominalAmount, cryptoPrice, dollarExchange, user, quote);
         }else {
-            throw new UserException("No se puede crear la intention de tipo " + crypto + ".La intencion debe ser de tipo buy o sale");
+            throw new UserException("No se puede crear la intencion de tipo " + operation + ".La intencion debe ser de tipo buy o sale");
         }
     }
 
