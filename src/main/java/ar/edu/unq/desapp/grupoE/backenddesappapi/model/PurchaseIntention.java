@@ -31,4 +31,12 @@ public class PurchaseIntention extends Intention {
             throw new UserException("cannot init transaction");
         }
     }
+
+    @Override
+    public void completeTransaction(Integer points, User buyer) {
+        scorePoints(points, buyer);
+        super.giveCrypto(getUser());
+        super.drawCrypto(buyer);
+    }
+
 }

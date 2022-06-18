@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public Intention expressIntention(Integer id, String crypto, Integer nominalAmount, Double cryptoPrice, String operation) throws UserException {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
+        User user = getUser(id);
         Double dollarExchange = dollarQuoteService.getDollarQuote();
         Intention intention = createIntention(crypto, nominalAmount, cryptoPrice, dollarExchange, operation, user, getCryptoQuote(crypto));
         user.expressIntention(intention);
@@ -55,7 +55,13 @@ public class UserService {
         return this.cryptoQuoteService.getCryptoQuote(symbol);
     }
 
-    public Integer tradedVolumeOfCryptoAssets(Integer id, LocalDateTime startDate, LocalDateTime finalDate) {
-        return userRepository.getTradedVolumeOfCryptoAssets(id, startDate, finalDate);
+    public TradedVolumeReport tradedVolumeOfCryptoAssets(Integer id, LocalDate startDate, LocalDate finalDate) throws UserException {
+        List<CryptoMovement> cryptoMovements = userRepository.getCryptoMovementsBetween(id, startDate, finalDate);
+        User user = getUser(id);
+        return new TradedVolumeReport(user, cryptoMovements, cryptoQuoteService.getAllCryptoQuotes(), dollarQuoteService.getDollarQuote());
+    }
+
+    private User getUser(Integer id) throws UserException {
+        return userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
     }
 }

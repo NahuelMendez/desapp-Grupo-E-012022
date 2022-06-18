@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-
 public class User {
 
     @Id
@@ -33,7 +32,9 @@ public class User {
     @Column
     private String walletAddress;
     @OneToMany(targetEntity=Intention.class, fetch=FetchType.EAGER)
-    private List<Intention> intentions;
+    private final List<Intention> intentions = new ArrayList<>();
+    @OneToMany(targetEntity=CryptoMovement.class, cascade=CascadeType.ALL)
+    private final List<CryptoMovement> cryptoMovements = new ArrayList<>();
     private Integer reputationPoints = 0;
 
     public User() {
@@ -48,7 +49,6 @@ public class User {
         this.password = password;
         this.cvu = cvu;
         this.walletAddress = walletAddress;
-        this.intentions = new ArrayList<>();
     }
 
     public String getFirstName() {
@@ -113,5 +113,9 @@ public class User {
 
     public Integer getId() {
         return id;
+    }
+
+    public void addCryptoMovement(CryptoMovement cryptoMovement) {
+        cryptoMovements.add(cryptoMovement);
     }
 }

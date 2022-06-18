@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -94,5 +95,20 @@ public abstract class Intention {
 
     protected boolean isOwner(User user) {
         return getUser().equals(user);
+    }
+
+    public abstract void completeTransaction(Integer points, User buyer);
+
+    protected void giveCrypto(User user) {
+        user.addCryptoMovement(new CryptoBuyingMovement(activeCrypto, nominalAmount, LocalDate.now()));
+    };
+
+    protected void drawCrypto(User user) {
+        user.addCryptoMovement(new CryptoSellMovement(activeCrypto, nominalAmount, LocalDate.now()));
+    };
+
+    protected void scorePoints(Integer points, User buyer) {
+        buyer.completeTransaction(points);
+        user.completeTransaction(points);
     }
 }

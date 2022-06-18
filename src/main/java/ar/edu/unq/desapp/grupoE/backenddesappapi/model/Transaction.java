@@ -124,8 +124,9 @@ public class Transaction {
     }
 
     private void completeTransactionForBoth( Integer points) {
-        buyer.completeTransaction(points);
-        intention.getUser().completeTransaction(points);
+        /*buyer.completeTransaction(points);
+        intention.getUser().completeTransaction(points);*/
+        intention.completeTransaction(points, buyer);
     }
 
     public Intention getIntention() {

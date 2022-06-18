@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Intention;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.model.TradedVolumeReport;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.IntentionService;
@@ -57,17 +58,17 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{id}/traded-volume")
-    public ResponseEntity<Integer> tradedVolume(
+    public ResponseEntity<ReportDTO> tradedVolume(
             @PathVariable("id") Integer id,
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("finalDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finalDate
-            ) {
-        Integer volume = userService.tradedVolumeOfCryptoAssets(
+            ) throws UserException {
+        TradedVolumeReport report = userService.tradedVolumeOfCryptoAssets(
                 id,
-                LocalDateTime.of(startDate, LocalTime.of(00,00,00)),
-                LocalDateTime.of(finalDate, LocalTime.of(00,00,00))
+                startDate,
+                finalDate
         );
-        return ResponseEntity.ok().body(volume);
+        return ResponseEntity.ok().body(new ReportDTO(report));
     }
 
     @GetMapping("/api/intentions")
