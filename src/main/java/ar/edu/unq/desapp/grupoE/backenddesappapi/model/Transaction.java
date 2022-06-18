@@ -124,8 +124,6 @@ public class Transaction {
     }
 
     private void completeTransactionForBoth( Integer points) {
-        /*buyer.completeTransaction(points);
-        intention.getUser().completeTransaction(points);*/
         intention.completeTransaction(points, buyer);
     }
 
@@ -135,5 +133,9 @@ public class Transaction {
 
     public void throwCancelOperation() throws UserException {
         throw new UserException(CANNOT_CANCEL_TRANSACTION);
+    }
+
+    public Integer getId() {
+        return this.id;
     }
 }

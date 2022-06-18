@@ -3,18 +3,20 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import org.springframework.context.annotation.Bean;
 
-public class SimpleUser {
-    private final String firstName;
-    private final String lastName;
-    private final Integer operationAmount;
-    private final Integer reputation;
+public class SimpleUserDTO {
+    private String firstName;
+    private String lastName;
+    private Integer operationAmount;
+    private Integer reputation;
 
-    public SimpleUser(User user) {
+    public SimpleUserDTO(User user) {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.operationAmount = user.getOperationsAmount();
         this.reputation = user.getReputation();
     }
+
+    public SimpleUserDTO(){};
 
     public String getFirstName() {
         return firstName;

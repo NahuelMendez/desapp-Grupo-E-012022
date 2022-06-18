@@ -5,11 +5,12 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.model.Transaction;
 
 public class TransactionDTO {
 
+    private Integer id;
     private String symbol;
     private Integer nominalAmount;
     private Double cryptoPrice;
     private Double operationAmount;
-    private SimpleUser user;
+    private SimpleUserDTO user;
     private String shippingAddress;
 
     public TransactionDTO(Transaction transaction){
@@ -18,9 +19,14 @@ public class TransactionDTO {
         this.nominalAmount = intention.getNominalAmount();
         this.cryptoPrice = intention.getCryptoPrice();
         this.operationAmount = intention.operationAmount();
-        this.user = new SimpleUser(intention.getUser());
+        this.user = new SimpleUserDTO(intention.getUser());
         this.shippingAddress = intention.shippingAddress();
+        this.id = transaction.getId();
     }
+
+    public TransactionDTO(){};
+
+    public Integer getId() { return id; }
 
     public String getSymbol() {
         return symbol;
@@ -38,7 +44,7 @@ public class TransactionDTO {
         return operationAmount;
     }
 
-    public SimpleUser getUser() {
+    public SimpleUserDTO getUser() {
         return user;
     }
 

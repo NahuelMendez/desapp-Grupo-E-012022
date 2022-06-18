@@ -2,16 +2,16 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 
-public class UserRegisterResponse {
+public class UserRegisterResponseDTO {
 
     private Integer id;
     private String firstName;
     private String lastName;
     private String email;
 
-    public UserRegisterResponse() {}
+    public UserRegisterResponseDTO() {}
 
-    public UserRegisterResponse(User user) {
+    public UserRegisterResponseDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

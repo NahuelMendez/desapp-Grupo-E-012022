@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,28 +31,28 @@ public class UserController {
     private IntentionService intentionService;
 
     @GetMapping("/api/users")
-    public ResponseEntity<List<SimpleUser>> allUsers() {
+    public ResponseEntity<List<SimpleUserDTO>> allUsers() {
         List<User> list = userService.findAll();
-        List<SimpleUser> response = list.stream().map(SimpleUser::new).collect(Collectors.toList());
+        List<SimpleUserDTO> response = list.stream().map(SimpleUserDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping(value = "/api/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserRegisterResponse> register(@Valid @RequestBody UserDTO userDTO) throws UserException {
+    public ResponseEntity<UserRegisterResponseDTO> register(@Valid @RequestBody UserDTO userDTO) throws UserException {
         User user = userDTO.createUser();
         User userResponse = userService.save(user);
-        return ResponseEntity.ok().body(new UserRegisterResponse(userResponse));
+        return ResponseEntity.ok().body(new UserRegisterResponseDTO(userResponse));
     }
 
     @PostMapping(value = "/api/users/{id}/intentions", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<IntentionResponse> expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
+    public ResponseEntity<IntentionResponseDTO> expressIntention(@PathVariable("id") Integer id, @Valid @RequestBody IntentionDTO intentionDTO) throws UserException {
         Intention intention = userService.expressIntention(
                 id,
                 intentionDTO.getCrypto(),
                 intentionDTO.getNominalAmount(),
                 intentionDTO.getCryptoPrice(),
                 intentionDTO.getOperation());
-        return ResponseEntity.ok().body(new IntentionResponse(intention));
+        return ResponseEntity.ok().body(new IntentionResponseDTO(intention));
     }
 
     @GetMapping("/api/users/{id}/traded-volume")
@@ -72,9 +70,9 @@ public class UserController {
     }
 
     @GetMapping("/api/intentions")
-    public ResponseEntity<List<IntentionResponse>> allActiveIntention() {
+    public ResponseEntity<List<IntentionResponseDTO>> allActiveIntention() {
         List<Intention> list = intentionService.findAllActiveIntentions();
-        List<IntentionResponse> response = list.stream().map(IntentionResponse::new).collect(Collectors.toList());
+        List<IntentionResponseDTO> response = list.stream().map(IntentionResponseDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(response);
     }
 }
