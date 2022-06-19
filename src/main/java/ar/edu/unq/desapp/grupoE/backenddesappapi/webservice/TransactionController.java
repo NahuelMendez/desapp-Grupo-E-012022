@@ -31,7 +31,7 @@ public class TransactionController {
         return ResponseEntity.ok().body(new TransactionDTO(transaction));
     }
 
-    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/paid}")
+    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/paid")
     public ResponseEntity<String> markAsPaid(
             @PathVariable("transactionId") Integer transactionId,
             @PathVariable("userId") Integer userId) throws UserException {
@@ -39,7 +39,7 @@ public class TransactionController {
         return ResponseEntity.ok().body("successful action");
     }
 
-    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/cancel}")
+    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/cancel")
     public ResponseEntity<String> cancel(
             @PathVariable("transactionId") Integer transactionId,
             @PathVariable("userId") Integer userId) throws UserException {
@@ -47,7 +47,7 @@ public class TransactionController {
         return ResponseEntity.ok().body("successful action");
     }
 
-    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/confirmed}")
+    @PutMapping(value = "/api/transactions/{transactionId}/users/{userId}/confirmed")
     public ResponseEntity<String> markAsPaymentConfirmed(
             @PathVariable("transactionId") Integer transactionId,
             @PathVariable("userId") Integer userId) throws UserException {

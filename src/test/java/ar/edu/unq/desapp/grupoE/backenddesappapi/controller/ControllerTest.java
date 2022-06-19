@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.controller;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.CryptoQuoteService;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.service.DollarQuoteService;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.IntentionDTO;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.IntentionResponseDTO;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.UserDTO;
@@ -29,6 +30,9 @@ abstract class ControllerTest {
 
     @MockBean
     CryptoQuoteService cryptoQuoteService;
+
+    @MockBean
+    DollarQuoteService dollarQuoteService;
 
     protected String baseURL() {return "http://localhost:" + port;}
 

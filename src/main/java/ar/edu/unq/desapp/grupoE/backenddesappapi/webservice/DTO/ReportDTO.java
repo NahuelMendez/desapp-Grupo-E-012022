@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 
 public class ReportDTO {
 
-    private final Integer user;
-    private final LocalDateTime dateTime;
-    private final Double totalValueInUSD;
-    private final Double totalValueInPesos;
-    private final List<AssetDTO> assets;
+    private Integer user;
+    private LocalDateTime dateTime;
+    private Double totalValueInUSD;
+    private Double totalValueInPesos;
+    private List<AssetDTO> assets;
+
+    public ReportDTO() {}
 
     public ReportDTO(TradedVolumeReport report) {
         this.user = report.getUser().getId();

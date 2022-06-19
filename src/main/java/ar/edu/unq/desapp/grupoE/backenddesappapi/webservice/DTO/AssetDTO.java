@@ -4,10 +4,12 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoReport;
 
 public class AssetDTO {
 
-    private final String crypto;
-    private final Integer nominalAmount;
-    private final Double priceInUsd;
-    private final Double priceInPesos;
+    private String crypto;
+    private Integer nominalAmount;
+    private Double priceInUsd;
+    private Double priceInPesos;
+
+    public AssetDTO() { }
 
     public AssetDTO(CryptoReport asset) {
         this.crypto = asset.getCrypto();
