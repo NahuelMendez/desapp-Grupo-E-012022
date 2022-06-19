@@ -9,10 +9,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -128,28 +131,26 @@ public class TransactionControllerTest extends ControllerTest{
         markAs(transaction, "/paid", transactionOwner);
         markAs(transaction, "/confirmed", intentionOwner);
 
-        ResponseEntity<ReportDTO> response = getTradedVolume(
-                intentionOwner,
-                LocalDate.now().minusDays(2),
-                LocalDate.now().plusDays(2)
-        );
+        ResponseEntity<ReportDTO> response = getTradedVolume(intentionOwner);
         ReportDTO body = response.getBody();
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
-    private ResponseEntity<ReportDTO> getTradedVolume(
-            UserRegisterResponseDTO user,
-            LocalDate startDate,
-            LocalDate finalDate) {
+    private ResponseEntity<ReportDTO> getTradedVolume(UserRegisterResponseDTO user) {
         return restTemplate.getForEntity(
-                tradedVolumeURL(user, startDate, finalDate),
+                tradedVolumeURL(user),
                 ReportDTO.class
         );
     }
 
-    private String tradedVolumeURL(UserRegisterResponseDTO user, LocalDate startDate, LocalDate finalDate) {
-        return urlUsers() + user.getId().toString() + "/traded-volume?startDate=" + startDate.toString() + "&finalDate=" + finalDate.toString();
+    private String tradedVolumeURL(UserRegisterResponseDTO user) {
+        return UriComponentsBuilder.fromHttpUrl(urlUsers() + "/" + user.getId().toString() + "/traded-volume")
+                .queryParam("startDate", LocalDate.now().minusDays(2))
+                .queryParam("finalDate", LocalDate.now().plusDays(2))
+                .build()
+                .encode()
+                .toUriString();
     }
 
     private ResponseEntity<String> markAs(TransactionDTO transaction, String actionURL, UserRegisterResponseDTO user) {
