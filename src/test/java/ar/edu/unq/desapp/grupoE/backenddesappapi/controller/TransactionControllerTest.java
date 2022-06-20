@@ -134,7 +134,14 @@ public class TransactionControllerTest extends ControllerTest{
         ResponseEntity<ReportDTO> response = getTradedVolume(intentionOwner);
         ReportDTO body = response.getBody();
 
+        Double totalInUSD = intention.getNominalAmount() * intention.getCryptoPrice();
+
         assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(body.getUser(), intentionOwner.getId());
+        assertEquals(body.getTotalValueInPesos(), totalInUSD * dollarQuoteService.getDollarQuote());
+        assertEquals(body.getTotalValueInUSD(), totalInUSD);
+        assertEquals(body.getAssets().size(), 1);
+        assertNotNull(body.getDateTime());
     }
 
     private ResponseEntity<ReportDTO> getTradedVolume(UserRegisterResponseDTO user) {

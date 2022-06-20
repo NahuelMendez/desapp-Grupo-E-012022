@@ -29,14 +29,14 @@ public class TradedVolumeReport {
     public Double getTotalValueInUSD() {
         return getAssets()
                 .stream()
-                .map(CryptoReport::getPriceInUsd)
+                .map( cryptoReport -> cryptoReport.getPriceInUsd() * cryptoReport.getNominalAmount())
                 .reduce( 0d, Double::sum);
     }
 
     public Double getTotalValueInPesos() {
         return getAssets()
                 .stream()
-                .map(CryptoReport::getPriceInPesos)
+                .map(cryptoReport -> cryptoReport.getPriceInPesos() * cryptoReport.getNominalAmount())
                 .reduce( 0d, Double::sum);
     }
 
