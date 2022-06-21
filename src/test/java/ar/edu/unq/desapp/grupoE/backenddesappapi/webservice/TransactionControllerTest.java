@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.controller;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.*;
@@ -14,8 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

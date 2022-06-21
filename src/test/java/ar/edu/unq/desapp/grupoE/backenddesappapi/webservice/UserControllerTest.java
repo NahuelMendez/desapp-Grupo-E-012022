@@ -1,9 +1,8 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.controller;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.*;
-import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.ResponseBadRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpEntity;

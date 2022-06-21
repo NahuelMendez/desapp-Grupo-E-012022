@@ -2,9 +2,8 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
