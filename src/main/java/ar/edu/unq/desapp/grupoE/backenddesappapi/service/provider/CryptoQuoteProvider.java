@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.service.provider;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
 import org.springframework.web.reactive.function.client.WebClient;

@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
 
+import ar.edu.unq.desapp.grupoE.backenddesappapi.service.provider.DollarQuoteProvider;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 

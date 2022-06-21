@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.service.provider;
 
  class Casa {
 
