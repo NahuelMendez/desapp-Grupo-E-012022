@@ -29,7 +29,7 @@ public class CryptoQuoteService {
     }
 
     @Async
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedDelay = 600000)
     public void saveAllCryptoQuotes() {
         cryptoRepository.saveAll(this.cryptoQuoteProvider.getAllCryptoQuotes());
     }

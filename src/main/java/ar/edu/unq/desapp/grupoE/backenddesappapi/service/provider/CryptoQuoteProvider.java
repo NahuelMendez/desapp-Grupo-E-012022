@@ -39,7 +39,7 @@ public class CryptoQuoteProvider {
                 .uri("/price?symbol=" + symbol)
                 .retrieve()
                 .bodyToMono(CryptoQuoteResponse.class)
-                .block(Duration.ofSeconds(10));
+                .block(/*Duration.ofSeconds(10)*/);
 
         return new CryptoQuote(response.getSymbol(), Double.valueOf(response.getPrice()), LocalDateTime.now());
     }
