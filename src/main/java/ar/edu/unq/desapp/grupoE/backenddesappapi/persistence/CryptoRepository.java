@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Configuration
@@ -18,4 +19,10 @@ public interface CryptoRepository extends CrudRepository<CryptoQuote, Integer> {
                                     "FROM CryptoQuote quote " +
                                     "GROUP BY quote.name)")
     List<CryptoQuote> findCryptoQuoteLastUpdate();
+
+    @Query( "DELETE FROM CryptoQuote quote WHERE quote.updateTime < ?1")
+    void deleteCryptoQuotePast24hr(LocalDateTime date);
+
+    @Query( "SELECT quote FROM CryptoQuote quote WHERE quote.name = ?1")
+    List<CryptoQuote> findAllCryptoQuoteFor(String symbol);
 }
