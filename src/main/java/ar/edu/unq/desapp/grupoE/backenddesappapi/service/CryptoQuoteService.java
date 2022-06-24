@@ -25,7 +25,7 @@ public class CryptoQuoteService {
     }
 
     public List<CryptoQuote> getAllCryptoQuotes(){
-        return cryptoRepository.findAll();
+        return cryptoRepository.findCryptoQuoteLastUpdate();
     }
 
     @Async
