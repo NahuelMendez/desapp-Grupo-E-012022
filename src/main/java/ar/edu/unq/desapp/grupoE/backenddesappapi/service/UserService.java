@@ -3,12 +3,16 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.*;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.persistence.UserRepository;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.security.JWTProvider;
+import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.TokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,9 +26,19 @@ public class UserService {
     private CryptoQuoteService cryptoQuoteService;
     @Autowired
     private DollarQuoteService dollarQuoteService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JWTProvider jwtProvider;
 
-    public User save(User user) {
-        return userRepository.save(user);
+    public User save(User user) throws UserException {
+        Optional<User> findedUser = userRepository.findByEmail(user.getEmail());
+        if (findedUser.isPresent())
+            throw new UserException("El Email ya existe");
+        String password = passwordEncoder.encode(user.getPassword());
+        User authUser = new User(user.getFirstName(), user.getLastName(), user.getEmail(), user.getAddress(), password, user.getCvu(), user.getWalletAddress());
+
+        return userRepository.save(authUser);
     }
 
     public List<User> findAll() {
@@ -64,4 +78,23 @@ public class UserService {
     private User getUser(Integer id) throws UserException {
         return userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
     }
+
+    public TokenDTO login(User user) throws UserException {
+        Optional<User> findedUser = userRepository.findByEmail(user.getEmail());
+        if (!findedUser.isPresent())
+            throw new UserException("El usuario no existe");
+        if (passwordEncoder.matches(user.getPassword(), findedUser.get().getPassword()))
+            return new TokenDTO(jwtProvider.createToken(findedUser.get()));
+        return null;
+    }
+
+    public TokenDTO validate(String token) throws UserException {
+        if (!jwtProvider.validateToken(token))
+            throw new UserException("Error de autenticacion");
+        String userEmail = jwtProvider.getUserEmail(token);
+        if (!userRepository.findByEmail(userEmail).isPresent())
+            throw new UserException("El email no es valido");
+        return new TokenDTO(token);
+    }
+
 }

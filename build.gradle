@@ -41,6 +41,7 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation 'com.tngtech.archunit:archunit:0.23.1'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
 }
 
 tasks.named('test') {

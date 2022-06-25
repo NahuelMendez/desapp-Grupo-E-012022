@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 @Repository
@@ -22,4 +23,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
             "WHERE user.id = ?1 and movements.date BETWEEN ?2 and ?3 ")
     List<CryptoMovement> getCryptoMovementsBetween(Integer id, LocalDate startDate, LocalDate finalDate);
 
+    Optional<User> findByEmail(String email);
 }

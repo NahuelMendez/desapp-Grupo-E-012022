@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.model.UserException;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.IntentionService;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.UserService;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.*;
+import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -75,4 +76,18 @@ public class UserController {
         List<IntentionResponseDTO> response = list.stream().map(IntentionResponseDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("/api/login")
+    public ResponseEntity<TokenDTO> login(@RequestBody AuthUserDTO authUserDTO) throws UserException {
+        User user = authUserDTO.createUser();
+        TokenDTO tokenDTO = userService.login(user);
+        return ResponseEntity.ok(tokenDTO);
+    }
+
+    @PostMapping("/api/validate")
+    public ResponseEntity<TokenDTO> validate(@RequestParam String token) throws UserException {
+        TokenDTO tokenDTO = userService.validate(token);
+        return ResponseEntity.ok(tokenDTO);
+    }
+
 }
