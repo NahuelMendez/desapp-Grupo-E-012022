@@ -6,8 +6,8 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.persistence.TransactionReposito
 import ar.edu.unq.desapp.grupoE.backenddesappapi.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Service

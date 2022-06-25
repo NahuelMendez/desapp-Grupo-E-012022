@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.controller;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.webservice;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.CryptoQuoteService;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.service.DollarQuoteService;
