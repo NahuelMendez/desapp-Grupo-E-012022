@@ -1,11 +1,12 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.service.provider;
 
 public class CryptoQuoteResponse {
 
     private String symbol;
     private String price;
 
-    public CryptoQuoteResponse() {}
+    public CryptoQuoteResponse() {
+    }
 
     public CryptoQuoteResponse(String symbol, String price) {
         this.symbol = symbol;

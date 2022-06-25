@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoE.backenddesappapi.service;
+package ar.edu.unq.desapp.grupoE.backenddesappapi.service.provider;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.model.CryptoQuote;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,9 +10,8 @@ import java.util.List;
 
 public class CryptoQuoteProvider {
 
-    private final String BASE_URL = "https://api1.binance.com/api/v3/ticker/";
-    private WebClient webClient;
-    private List<String> cryptoSymbols = Arrays.asList(
+    private final WebClient webClient;
+    private final List<String> cryptoSymbols = Arrays.asList(
             "ALICEUSDT",
             "MATICUSDT",
             "AXSUSDT",
@@ -30,6 +29,7 @@ public class CryptoQuoteProvider {
     );
 
     public CryptoQuoteProvider(){
+        String BASE_URL = "https://api1.binance.com/api/v3/ticker/";
         this.webClient = WebClient.builder().baseUrl(BASE_URL).build();
     }
 
@@ -39,7 +39,7 @@ public class CryptoQuoteProvider {
                 .uri("/price?symbol=" + symbol)
                 .retrieve()
                 .bodyToMono(CryptoQuoteResponse.class)
-                .block(Duration.ofSeconds(10));
+                .block();
 
         return new CryptoQuote(response.getSymbol(), Double.valueOf(response.getPrice()), LocalDateTime.now());
     }

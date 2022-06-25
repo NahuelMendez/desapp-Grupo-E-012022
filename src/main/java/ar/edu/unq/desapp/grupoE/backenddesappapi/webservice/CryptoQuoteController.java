@@ -20,8 +20,8 @@ public class CryptoQuoteController {
     private CryptoQuoteService cryptoQuoteService;
 
     @GetMapping("/api/crypto/{symbol}")
-    public ResponseEntity<CryptoQuote> getCryptoQuotes(@PathVariable("symbol") String symbol){
-        return  ResponseEntity.ok().body(this.cryptoQuoteService.getCryptoQuote(symbol));
+    public ResponseEntity<List<CryptoQuote>> getCryptoQuotes(@PathVariable("symbol") String symbol){
+        return  ResponseEntity.ok().body(this.cryptoQuoteService.getAllCryptoQuoteFor(symbol));
     }
 
     @GetMapping("/api/crypto")
