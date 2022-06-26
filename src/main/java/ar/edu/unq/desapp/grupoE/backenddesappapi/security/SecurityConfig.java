@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.security;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.persistence.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,8 +14,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
+
+import static java.lang.String.format;
 
 @EnableWebSecurity
 @Configuration
@@ -22,6 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserRepository userRepo;
     private final JwtTokenFilter jwtTokenFilter;
+    @Value("${springdoc.swagger-ui.path}")
+    private String swaggerPath;
 
     public SecurityConfig(UserRepository userRepo,
                           JwtTokenFilter jwtTokenFilter) {
@@ -66,8 +74,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         http.authorizeRequests()
                 // Our public endpoints
-                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers(format("%s/**", swaggerPath)).permitAll()
+                .antMatchers(HttpMethod.POST, "/api/login/").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/").permitAll()
                 // Our private endpoints
                 .anyRequest().authenticated();
 
@@ -78,9 +88,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         );
     }
 
-    @Override @Bean
+    @Override
+    @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 
 }

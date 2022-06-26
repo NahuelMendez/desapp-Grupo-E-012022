@@ -1,14 +1,18 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -67,8 +71,38 @@ public class User {
         return address;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new HashSet<>();
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public String getCvu() {

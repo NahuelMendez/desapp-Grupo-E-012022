@@ -6,6 +6,10 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.security.JWTProvider;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.TokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +34,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JWTProvider jwtProvider;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public User save(User user) throws UserException {
         Optional<User> findedUser = userRepository.findByEmail(user.getEmail());
@@ -79,13 +85,20 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
     }
 
-    public TokenDTO login(User user) throws UserException {
+    public User login(User user) throws UserException {
         Optional<User> findedUser = userRepository.findByEmail(user.getEmail());
         if (!findedUser.isPresent())
             throw new UserException("El usuario no existe");
-        if (passwordEncoder.matches(user.getPassword(), findedUser.get().getPassword()))
-            return new TokenDTO(jwtProvider.createToken(findedUser.get()));
-        return null;
+        /*if (passwordEncoder.matches(user.getPassword(), findedUser.get().getPassword()))
+            return new TokenDTO(jwtProvider.createToken(findedUser.get()));*/
+        Authentication authenticate = authenticationManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    user.getEmail(), user.getPassword()
+                            )
+                    );
+
+        return (User) authenticate.getPrincipal();
     }
 
     public TokenDTO validate(String token) throws UserException {
