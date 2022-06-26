@@ -85,12 +85,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserException("No se encontro el usuario"));
     }
 
-    public User login(User user) throws UserException {
-        Optional<User> findedUser = userRepository.findByEmail(user.getEmail());
-        if (!findedUser.isPresent())
-            throw new UserException("El usuario no existe");
-        /*if (passwordEncoder.matches(user.getPassword(), findedUser.get().getPassword()))
-            return new TokenDTO(jwtProvider.createToken(findedUser.get()));*/
+    public User login(User user) {
         Authentication authenticate = authenticationManager
                     .authenticate(
                             new UsernamePasswordAuthenticationToken(

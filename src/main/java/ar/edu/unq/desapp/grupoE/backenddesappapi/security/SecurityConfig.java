@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoE.backenddesappapi.security;
 
 import ar.edu.unq.desapp.grupoE.backenddesappapi.persistence.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,8 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -20,30 +20,27 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static java.lang.String.format;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserRepository userRepo;
+    private final UserRepository userRepository;
     private final JwtTokenFilter jwtTokenFilter;
-    @Value("${springdoc.swagger-ui.path}")
-    private String swaggerPath;
 
     public SecurityConfig(UserRepository userRepo,
                           JwtTokenFilter jwtTokenFilter) {
-        this.userRepo = userRepo;
+        this.userRepository = userRepo;
         this.jwtTokenFilter = jwtTokenFilter;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userEmail -> (UserDetails) userRepo
+        auth.userDetailsService(userEmail -> userRepository
                 .findByEmail(userEmail)
                 .orElseThrow(
                         () -> new UsernameNotFoundException("El email: " + userEmail + " no se encontro.")
-                        )
+                )
         );
     }
 
@@ -75,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // Our public endpoints
                 .antMatchers("/").permitAll()
-                .antMatchers(format("%s/**", swaggerPath)).permitAll()
+                .antMatchers("swagger-ui.html#/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/login/").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/").permitAll()
                 // Our private endpoints
@@ -92,6 +89,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
