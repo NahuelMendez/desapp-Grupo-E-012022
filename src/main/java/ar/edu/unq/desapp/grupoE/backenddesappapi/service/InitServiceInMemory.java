@@ -32,7 +32,7 @@ public class InitServiceInMemory {
 
     private void fireInitialData() throws UserException {
         User user = new User("Pepe", "Pepa", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
-        User user2 = new User("Samanta", "Quiroga", "email@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
+        User user2 = new User("Samanta", "Quiroga", "email2@gmail.com", "San Martin 185", "unaPassw123??", "1234567891234567891234", "12345678");
         userService.save(user);
         userService.save(user2);
     }
