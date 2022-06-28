@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.grupoE.backenddesappapi;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
@@ -10,51 +10,37 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .securitySchemes(Collections.singletonList(apiKey()))
+                .securityContexts(Collections.singletonList(
+                        securityContext())
+                )
+                .select()
+                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+                .build();
+    }
 
     private ApiKey apiKey() {
         return new ApiKey("JWT", "Authorization", "header");
     }
 
     private SecurityContext securityContext() {
-        return SecurityContext.builder().securityReferences(defaultAuth()).build();
-    }
-
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
-    }
-
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(getApiInfo())
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("ar.edu.unq.desapp.grupoE.backenddesappapi.webservice"))
-                .paths(PathSelectors.any())
+        return SecurityContext.builder()
+                .securityReferences(
+                        Collections.singletonList(SecurityReference.builder()
+                                .reference("JWT")
+                                .scopes(new AuthorizationScope[0])
+                                .build()
+                        )
+                )
                 .build();
-    }
-
-    private ApiInfo getApiInfo() {
-        return new ApiInfo(
-                "CryptoP2P API",
-                "CryptoP2P API Description",
-                "1.0",
-                "http://cryptop2p.com/terms",
-                new Contact("CryptoP2P", "https://cryptop2p.com", "apis@cryptop2p.com"),
-                "LICENSE",
-                "LICENSE URL",
-                Collections.emptyList()
-        );
     }
 }
