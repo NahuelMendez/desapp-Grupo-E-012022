@@ -56,8 +56,7 @@ public class UserControllerTest extends ControllerTest{
         String symbol = "ALICEUSDT";
         Double price = 220d;
         CryptoQuote cryptoQuote = new CryptoQuote(symbol, price, LocalDateTime.now());
-        Mockito.when(cryptoQuoteService.getCryptoQuote(symbol)).thenReturn(cryptoQuote);
-        Mockito.when(dollarQuoteService.getDollarQuote()).thenReturn(200d);
+        setMockServicesResponses(symbol, cryptoQuote);
 
         UserDTO userRegisterDTO = anyUser();
 
@@ -74,8 +73,7 @@ public class UserControllerTest extends ControllerTest{
         String symbol = "ALICEUSDT";
         Double price = 220d;
         CryptoQuote cryptoQuote = new CryptoQuote(symbol, price, LocalDateTime.now());
-        Mockito.when(cryptoQuoteService.getCryptoQuote(symbol)).thenReturn(cryptoQuote);
-        Mockito.when(dollarQuoteService.getDollarQuote()).thenReturn(200d);
+        setMockServicesResponses(symbol, cryptoQuote);
 
         UserDTO userRegisterDTO = anyUser();
         UserRegisterResponseDTO user = registerUser(userRegisterDTO).getBody();
@@ -90,6 +88,11 @@ public class UserControllerTest extends ControllerTest{
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(body.length, 2);
+    }
+
+    private void setMockServicesResponses(String symbol, CryptoQuote cryptoQuote) {
+        Mockito.when(cryptoQuoteService.getCryptoQuote(symbol)).thenReturn(cryptoQuote);
+        Mockito.when(dollarQuoteService.getDollarQuote()).thenReturn(200d);
     }
 
     private ResponseEntity<IntentionResponseDTO[]> getAllActiveIntentions() {
