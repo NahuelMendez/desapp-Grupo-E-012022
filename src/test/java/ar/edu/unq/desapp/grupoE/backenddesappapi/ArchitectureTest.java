@@ -16,7 +16,7 @@ public class ArchitectureTest {
     public static final String PATH = "ar.edu.unq.desapp.grupoE.backenddesappapi";
 
     @Test
-    public void layerChecksAccess() {
+    public void checkLayersAccess() {
         JavaClasses importedClasses = new ClassFileImporter().importPackages(PATH);
 
         ArchRule rule = layeredArchitecture()
