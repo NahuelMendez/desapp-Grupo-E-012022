@@ -39,7 +39,7 @@ KNOWN ISSUES:
 RELEASE NOTES
 
 ---------------------------------------------------------------------
-TAG ENTREGA1 2.0 -> https://github.com/NahuelMendez/desapp-Grupo-E-012022/releases/tag/Entrega2_v2.0
+TAG ENTREGA2 1.0 -> https://github.com/NahuelMendez/desapp-Grupo-E-012022/releases/tag/Entrega2_v1.0
 ---------------------------------------------------------------------
 
 NEW FEATURES:
@@ -53,4 +53,16 @@ NEW FEATURES:
     - Informar al usuario el volumen operado de cripto activos entre dos fechas
 
 
+---------------------------------------------------------------------
+TAG ENTREGA3 1.0 -> https://github.com/NahuelMendez/desapp-Grupo-E-012022/releases/tag/Entrega3_v1.0
+---------------------------------------------------------------------
 
+NEW FEATURES:
+* Tests:
+    - Tests de arquitectura
+
+* Funcionalidades:
+    - Auditoria web service
+    - Capa de seguridad agregada con JWT
+    - Mostrar las cotizaciones de las últimas 24hs para un determinado cripto activo
+    - Mejora de la performance en el listado de las cotizaciones
