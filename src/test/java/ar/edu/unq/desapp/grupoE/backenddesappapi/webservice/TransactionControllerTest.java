@@ -31,7 +31,7 @@ public class TransactionControllerTest extends ControllerTest{
     @BeforeEach
     public void setUp(){
         intentionOwner = getRegisteredUser(anyUser());
-        transactionOwner = getRegisteredUser(anyUser());
+        transactionOwner = getRegisteredUser(anotherUser());
 
         CryptoQuote cryptoQuote = new CryptoQuote("ALICEUSDT", 220d, LocalDateTime.now());
         Mockito.when(cryptoQuoteService.getCryptoQuote("ALICEUSDT")).thenReturn(cryptoQuote);
@@ -143,8 +143,10 @@ public class TransactionControllerTest extends ControllerTest{
     }
 
     private ResponseEntity<ReportDTO> getTradedVolume(UserRegisterResponseDTO user) {
-        return restTemplate.getForEntity(
+        return restTemplate.exchange(
                 tradedVolumeURL(user),
+                HttpMethod.GET,
+                new HttpEntity<>(getHttpHeaders()),
                 ReportDTO.class
         );
     }
@@ -162,7 +164,7 @@ public class TransactionControllerTest extends ControllerTest{
         return restTemplate.exchange(
                 transactionActionsURL(transaction, user.getId()) + actionURL,
                 HttpMethod.PUT,
-                HttpEntity.EMPTY,
+                new HttpEntity<String>(getHttpHeaders()),
                 String.class
         );
     }
@@ -179,7 +181,7 @@ public class TransactionControllerTest extends ControllerTest{
     private ResponseEntity<TransactionDTO> createTransactionForIntention(Integer intentionId, Integer userId) {
         return restTemplate.postForEntity(
                 urlNewTransaction(intentionId, userId),
-                HttpEntity.EMPTY,
+                new HttpEntity<String>(getHttpHeaders()),
                 TransactionDTO.class
         );
     }

@@ -10,6 +10,11 @@ public class AuthUserDTO {
     private String email;
     private String password;
 
+    public AuthUserDTO(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
+
     public User createUser() throws UserException {
         return new User("firstName",  "lastName",  email,  "addressExample",  password,  "12341234!!",  "12341234123412341234");
     }

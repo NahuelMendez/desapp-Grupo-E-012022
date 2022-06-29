@@ -96,13 +96,13 @@ public class UserService {
         return (User) authenticate.getPrincipal();
     }
 
-    public TokenDTO validate(String token) throws UserException {
+    /*public TokenDTO validate(String token) throws UserException {
         if (!jwtProvider.validateToken(token))
             throw new UserException("Error de autenticacion");
         String userEmail = jwtProvider.getUserEmail(token);
         if (!userRepository.findByEmail(userEmail).isPresent())
             throw new UserException("El email no es valido");
         return new TokenDTO(token);
-    }
+    }*/
 
 }

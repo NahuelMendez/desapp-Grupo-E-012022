@@ -5,10 +5,10 @@ import ar.edu.unq.desapp.grupoE.backenddesappapi.model.User;
 import ar.edu.unq.desapp.grupoE.backenddesappapi.webservice.DTO.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,12 +16,13 @@ public class UserControllerTest extends ControllerTest{
 
     @Test
     void getAllUsersReturnsResponsesStatusOKAndUsersList() {
+        registerUser(anyUser());
         ResponseEntity<User[]> response = getAllUsers();
 
         User[] body = response.getBody();
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(body.length, 2);
+        assertEquals(body.length, 3);
     }
 
     @Test
@@ -69,6 +70,7 @@ public class UserControllerTest extends ControllerTest{
         Mockito.verify(cryptoQuoteService).getCryptoQuote(symbol);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
+
     @Test
     void getAllIntentionsReturnsStatusOk() {
         String symbol = "ALICEUSDT";
@@ -93,15 +95,19 @@ public class UserControllerTest extends ControllerTest{
     }
 
     private ResponseEntity<IntentionResponseDTO[]> getAllActiveIntentions() {
-        return restTemplate.getForEntity(
+        return restTemplate.exchange(
                 baseURL() + "/api/intentions",
+                HttpMethod.GET,
+                new HttpEntity<String>(getHttpHeaders()),
                 IntentionResponseDTO[].class
         );
     }
 
     private ResponseEntity<User[]> getAllUsers() {
-        return restTemplate.getForEntity(
+        return restTemplate.exchange(
                 urlUsers(),
+                HttpMethod.GET,
+                new HttpEntity<String>(getHttpHeaders()),
                 User[].class
         );
     }

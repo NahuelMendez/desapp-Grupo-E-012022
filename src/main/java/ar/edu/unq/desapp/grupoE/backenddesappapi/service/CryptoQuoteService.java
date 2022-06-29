@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +36,11 @@ public class CryptoQuoteService {
     }
 
     public List<CryptoQuote> getAllCryptoQuotes(){
-        return cryptoRepository.findCryptoQuoteLastUpdate();
+        List<CryptoQuote> quotes = cryptoRepository.findCryptoQuoteLastUpdate();
+        if (quotes.isEmpty()) {
+            return this.cryptoQuoteProvider.getAllCryptoQuotes();
+        }
+        return quotes;
     }
 
     @Async

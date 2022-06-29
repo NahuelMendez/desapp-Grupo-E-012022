@@ -23,9 +23,10 @@ public class ArchitectureTest {
                 .layer("Controller").definedBy("..webservice..")
                 .layer("Service").definedBy("..service..")
                 .layer("Persistence").definedBy("..persistence..")
+                .layer("Security").definedBy("..security..")
                 .whereLayer("Controller").mayNotBeAccessedByAnyLayer()
                 .whereLayer("Service").mayOnlyBeAccessedByLayers("Controller")
-                .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service");
+                .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service", "Security");
 
         rule.check(importedClasses);
     }
