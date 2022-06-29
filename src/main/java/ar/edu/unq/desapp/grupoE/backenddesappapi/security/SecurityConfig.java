@@ -20,7 +20,6 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
-
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -46,16 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // http.csrf().disable().authorizeRequests().anyRequest().permitAll();
         http = http.cors().and().csrf().disable();
-
-        // Set session management to stateless
         http = http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and();
 
-        // Set unauthorized requests exception handler
         http = http
                 .exceptionHandling()
                 .authenticationEntryPoint(
@@ -68,17 +63,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .and();
 
-        // Set permissions on endpoints
         http.authorizeRequests()
-                // Our public endpoints
                 .antMatchers("/").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger-resources/**",  "/swagger-ui.html", "/webjars/**", "/api-docs/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/login/", "/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/", "/api/users").permitAll()
-                // Our private endpoints
                 .anyRequest().authenticated();
 
-        // Add JWT token filter
         http.addFilterBefore(
                 jwtTokenFilter,
                 UsernamePasswordAuthenticationFilter.class

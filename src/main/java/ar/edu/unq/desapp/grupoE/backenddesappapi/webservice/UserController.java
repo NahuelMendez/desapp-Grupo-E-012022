@@ -91,10 +91,4 @@ public class UserController {
                 .body("ok");
     }
 
-    /*@PostMapping("/api/validate")
-    public ResponseEntity<TokenDTO> validate(@RequestParam String token) throws UserException {
-        TokenDTO tokenDTO = userService.validate(token);
-        return ResponseEntity.ok(tokenDTO);
-    }*/
-
 }

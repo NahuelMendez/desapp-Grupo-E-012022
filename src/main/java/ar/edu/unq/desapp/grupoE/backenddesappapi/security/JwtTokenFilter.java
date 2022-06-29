@@ -29,21 +29,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // Get authorization header and validate
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header == null || header.isEmpty() /*|| !header.startsWith("Bearer")*/) {
+        if (header == null || header.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Get jwt token and validate
-        /*final String token = header.split(" ")[1].trim();*/
         if (!jwtTokenUtil.validateToken(header)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Get user identity and set it on the spring security context
         User userDetails = userRepository
                 .findByEmail(jwtTokenUtil.getUserEmail(header))
                 .orElse(null);
